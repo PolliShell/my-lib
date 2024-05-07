@@ -9,7 +9,7 @@ google_email_app.set('view engine', 'ejs');
 google_email_app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'SECRET'
+    secret: process.env.SESSION_SECRET
 }));
 
 google_email_app.get('/auth', function(req, res) {
