@@ -1,0 +1,19 @@
+.main {
+  padding-top: 50px;
+}
+
+section {
+  padding: 0 5px;
+  padding-bottom: 30px;
+}
+
+section h2 {
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.books {
+  display: flex;
+  align-items: center;
+}
