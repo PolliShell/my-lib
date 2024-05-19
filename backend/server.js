@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const bookRoutes = require("./routes/bookRoutes");
 const authorRoutes = require("./routes/authorRoutes");
@@ -28,12 +29,21 @@ app.use(
   })
 );
 
-app.use("/shop", bookRoutes);
-app.use("/authors", authorRoutes);
+app.use("/api/books", bookRoutes);
+app.use("/api/authors", authorRoutes);
 app.use("/auth", authRouter);
 
 const PORT = process.env.APP_PORT || 3333;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+mongoose
+  .set("strictQuery", true)
+  .connect(process.env.DB_HOST)
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });

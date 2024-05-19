@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -30,5 +30,9 @@
     "pg": "^8.11.5",
     "pg-pool": "^3.6.2",
     "react-router": "^6.23.0"
+  },
+  "devDependencies": {
+    "mongoose": "^8.4.0",
+    "nodemon": "^3.1.0"
   }
 }

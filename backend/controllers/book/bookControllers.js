@@ -1,9 +1,15 @@
 const db = require("../../config/db");
+const Book = require("../../models/book");
 
 const getAll = async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM book");
-    res.json(result.rows);
+    const books = await Book.find();
+
+    if (!books.length) {
+      res.status(404).send("Books not found");
+    }
+
+    res.status(200).json(books);
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
