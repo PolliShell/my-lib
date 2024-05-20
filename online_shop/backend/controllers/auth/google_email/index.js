@@ -53,4 +53,3 @@ google_email_app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/error', successRedirect: '/success' }));
 
 module.exports = google_email_app;
-

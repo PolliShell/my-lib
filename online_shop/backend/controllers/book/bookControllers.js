@@ -28,7 +28,7 @@ const getBooksByAuthorId = async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM book WHERE author_id = $1', [author_id]);
         console.log(`SQL Query Result:`, result.rows);
-        res.json({ books: result.rows });
+        res.json({ products: result.rows });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');

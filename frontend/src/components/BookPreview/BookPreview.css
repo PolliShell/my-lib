@@ -1,0 +1,36 @@
+.book {
+  cursor: pointer;
+}
+
+.book:not(:last-child) {
+  margin-right: 30px;
+}
+
+.book-img {
+  display: block;
+  max-width: 156px;
+  width: 100%;
+}
+
+.book-info {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-title {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 3px;
+}
+
+.book-author {
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.book-price {
+  font-weight: 500;
+  font-size: 14px;
+}

@@ -1,0 +1,283 @@
+body {
+  background: #f6f8fa;
+}
+
+.book {
+  position: relative;
+  padding-top: 50px;
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.book_bg_cover {
+  position: absolute;
+  background: #2e2e2e;
+  padding-top: 35px;
+  padding-bottom: 20px;
+  border-radius: 50px;
+  width: 100%;
+  height: 150px;
+  z-index: -1;
+}
+
+.book_image {
+  width: 195px;
+  height: 286px;
+  margin-top: 50px;
+  flex-grow: 0;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 25%);
+}
+
+.book_inner {
+  margin-left: 30px;
+  margin-top: 35px;
+  max-width: 550px;
+  flex-grow: 2;
+}
+
+.book_info {
+  color: #fff;
+}
+
+.book_title {
+  font-weight: 500;
+  font-size: 36px;
+  margin-bottom: 5px;
+}
+
+.book_author {
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.book_genres {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.book_actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 60px;
+  flex-grow: 1;
+}
+
+.book_price {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.book_btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.read_online,
+.buy {
+  min-width: 140px;
+  min-height: 34px;
+  border-radius: 15px;
+  border: 1px solid #fff;
+  font-size: 14px;
+}
+
+.read_online {
+  color: #fff;
+  background: transparent;
+}
+
+.buy {
+  background: #fff;
+  color: #2e2e2e;
+  font-weight: 500;
+}
+
+.actions_separator {
+  width: 1px;
+  height: 20px;
+  margin: 0 10px;
+  background: #fff;
+}
+
+.book_rating {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.book_rating_num {
+  position: relative;
+  display: inline;
+  font-size: 26px;
+}
+
+.book_rating_num span {
+  font-size: 26px;
+}
+
+.book_rating_num img {
+  position: absolute;
+  top: -5px;
+  right: -24px;
+  max-width: 20px;
+}
+
+.book_rating_action {
+  display: flex;
+  gap: 0 2px;
+  margin-left: 40px;
+}
+
+.book_rating_action img {
+  max-width: 25px;
+  height: 100%;
+  max-height: 25px;
+  cursor: pointer;
+}
+
+.book_rating_text {
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.book_description {
+  margin-top: 20px;
+}
+
+.book_desc_heading {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.book_desc_inner {
+  margin-bottom: 100px;
+}
+
+.book_desc_inner p,
+.book_resentment_text p {
+  line-height: 135%;
+  font-size: 16px;
+  margin-bottom: 5px;
+  text-align: justify;
+}
+
+.book_desc_resize {
+  cursor: pointer;
+  color: #3899df;
+}
+
+.book_publisher {
+  text-align: right;
+  margin-bottom: 50px;
+  color: #626b77;
+}
+
+.book_publisher_link {
+  cursor: pointer;
+  color: #3899df;
+  margin-left: 5px;
+}
+
+.book_resentment_heading {
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.book_resentment_commenter {
+  margin-left: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.book_resentment_commenter img {
+  max-width: 30px;
+  margin-right: 10px;
+}
+
+.book_resentment_commenter_heading {
+  font-size: 12px;
+  color: #626b77;
+  flex-grow: 1;
+}
+
+.book_resentment_commenter_heading b {
+  color: #2e2e2e;
+}
+
+.book_resentment_date {
+  color: #626b77;
+  font-size: 12px;
+  font-weight: 200;
+}
+
+.book_resentment_rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.book_resentment_rating img {
+  max-height: 15px;
+  max-width: 15px;
+  margin-right: 5px;
+}
+
+.book_resentment_rating span {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.book_resentment_text {
+  margin-bottom: 25px;
+}
+
+.book_resentment_text p {
+  margin-bottom: 2px;
+}
+
+.book_resentment_text .book_desc_resize {
+  font-size: 14px;
+}
+
+.book_additional_info {
+  margin: 50px 0;
+}
+
+.horizontal_hr {
+  width: 100%;
+  height: 1px;
+  background: #e6e8ee;
+  margin: 25px 0;
+}
+
+.book_additional_info h4 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.book_additional_info span {
+  display: block;
+  font-size: 16px;
+  line-height: 135%;
+}
+
+.book_resentments {
+  margin-bottom: 50px;
+}
+
+.book_resentments h4 {
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
