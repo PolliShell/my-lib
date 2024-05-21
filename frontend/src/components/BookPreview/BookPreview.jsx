@@ -1,21 +1,15 @@
+import React from "react";
 import "./BookPreview.css";
-import BookCoverImg from "../../public/Homepage/book-cover.png";
 
-const toBookPage = () => {
-  return (window.location.href = "/book");
-};
-
-export const BookPreview = () => {
-  return (
-    <>
-      <div className="book" onClick={toBookPage}>
-        <img src={BookCoverImg} alt="book img" className="book-img" />
-        <div className="book-info">
-          <span className="book-title">Назва книги</span>
-          <span className="book-author">Автор книги</span>
-          <span className="book-price">699 грн</span>
+export const BookPreview = ({ book }) => {
+    return (
+        <div className="book">
+            <img src={book.cover_image} alt={book.title} className="book-img" />
+            <div className="book-info">
+                <h3 className="book-title">{book.title}</h3>
+                <p className="book-author">{book.authorName}</p>
+                <p className="book-price">{book.price} грн</p>
+            </div>
         </div>
-      </div>
-    </>
-  );
+    );
 };
