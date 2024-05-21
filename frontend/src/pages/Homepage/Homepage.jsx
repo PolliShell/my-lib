@@ -16,7 +16,6 @@ export const Homepage = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/books/`
       );
-      console.log({ data });
       setBooks(data);
     } catch (error) {
       console.error("Failed to fetch books", error);
