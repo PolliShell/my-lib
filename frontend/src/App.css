@@ -13,10 +13,12 @@ body {
 }
 
 input {
+  font-family: "Rubik";
   outline: none;
 }
 
 button {
+  font-family: "Rubik";
   cursor: pointer;
 }
 

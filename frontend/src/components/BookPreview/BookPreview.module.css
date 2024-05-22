@@ -1,0 +1,83 @@
+.book {
+  position: relative;
+  cursor: pointer;
+}
+
+.book:hover .get_in_favorite_btn {
+  display: inline-block;
+}
+
+.book:hover .book_img {
+  opacity: 0.8;
+}
+
+.get_in_favorite_btn {
+  position: absolute;
+  z-index: 1000;
+  right: 0px;
+  top: 0px;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  display: none;
+}
+
+.get_in_favorite_btn img {
+  display: block;
+  max-width: 24px;
+}
+
+.book_actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.book_actions button {
+  font-size: 14px;
+  padding: 2px 4px;
+  border: none;
+  border-radius: 5px;
+}
+
+.book_buy {
+  background: #3d58b3;
+  color: #fff;
+}
+
+.book:not(:last-child) {
+  margin-right: 30px;
+}
+
+.book_img {
+  display: block;
+  width: 156px;
+  height: 230px;
+  border-radius: 15px;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.book_info {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 5px;
+}
+
+.book_title {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 3px;
+}
+
+.book_author {
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.book_price {
+  font-weight: 500;
+  font-size: 14px;
+}
