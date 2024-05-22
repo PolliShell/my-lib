@@ -10,11 +10,11 @@ import LoginForm from "./polli_components/LoginForm/LoginForm";
 export const App = () => {
   return (
     <>
-      {/*<Routes>*/}
-      {/*  <Route path="/" element={<Homepage />} />*/}
-      {/*  <Route path="/book" element={<BookPage />} />*/}
-      {/*</Routes>*/}
-<LoginForm/>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/book" element={<BookPage />} />
+      </Routes>
+{/*<LoginForm/>*/}
 {/*<SignUpForm/>*/}
     </>
   );
