@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios"; // Импортируем Axios
 import { Navbar } from "../../components/Navbar/Navbar";
 import { BookPreview } from "../../components/BookPreview/BookPreview";
 import "./Homepage.css";
@@ -9,9 +10,8 @@ export const Homepage = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await fetch("http://localhost:3000/books");
-        const data = await response.json();
-        setBooks(data);
+        const response = await axios.get("http://localhost:3000/books");
+        setBooks(response.data);
       } catch (error) {
         console.error("Failed to fetch books", error);
       }

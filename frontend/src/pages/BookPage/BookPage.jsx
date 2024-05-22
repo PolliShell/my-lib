@@ -4,6 +4,7 @@ import BookCoverImg from "../../public/BookPage/book-cover.png";
 import BookRatingNumIcon from "../../public/BookPage/rating num icon.png";
 import OutlinedRatingIcon from "../../public/BookPage/outlined star icon.png";
 import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
+import axios from "axios";
 import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
 import s from "./BookPage.module.css";
 import {useParams} from "react-router-dom";
@@ -20,12 +21,8 @@ export const BookPage = () => {
           return;
         }
 
-        const response = await fetch(`http://localhost:3000/books/${id}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setBook(data);
+        const response = await axios.get(`http://localhost:3000/books/${id}`);
+        setBook(response.data);
       } catch (error) {
         console.error('Failed to fetch book', error);
       }
@@ -33,6 +30,7 @@ export const BookPage = () => {
 
     fetchBook();
   }, [id]);
+
 
   if (!book) return <div>Loading...</div>;
 
