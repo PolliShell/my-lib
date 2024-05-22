@@ -9,31 +9,28 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true }));
 
-app.use(
-  session({
+app.use(session({
     secret: process.env.COOKIE_SECRET,
     credentials: true,
     name: "sid",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.ENVIRONMENT === "production",
-      httpOnly: true,
-      sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
-    },
-  })
-);
+        secure: process.env.ENVIRONMENT === "production",
+        httpOnly: true,
+        sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax"
+    }
+}));
 
-app.use("/api/books", bookRoutes);
-app.use("/api/authors", authorRoutes);
-app.use("/api/auth", authRouter);
+app.use("/books", bookRoutes);
+app.use("/authors", authorRoutes);
+app.use("/auth", authRouter);
 
-const PORT = process.env.APP_PORT || 3333;
+const PORT = process.env.APP_PORT;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log('Server is running on port 3000');
 });

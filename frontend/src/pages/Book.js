@@ -2,18 +2,18 @@ import React from "react";
 import BookRatingNumIcon from "../../public/BookPage/rating num icon.png";
 import OutlinedRatingIcon from "../../public/BookPage/outlined star icon.png";
 import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
-import s from "./BookPage.module.css";
+import s from "./Book.module.css";
 
-const Book = ({ book }) => {
+export const Book = ({ book }) => {
     return (
         <div className={s.book}>
             <div className={s.book_bg_cover}></div>
-            <img className={s.book_image} src={book.cover_image} alt="book cover img"></img>
+            <img className={s.book_image} src={book.cover_image} alt="book cover img" />
             <div className={s.book_inner}>
                 <div className={s.book_info}>
                     <h3 className={s.book_title}>{book.title}</h3>
                     <h4 className={s.book_author}>{book.authorName}</h4>
-                    <span className={s.book_genres}>{book.genres ? book.genres.join(", ") : ''}</span>
+                    {/*<span className={s.book_genres}>{book.genres ? book.genres.join(", ") : ""}</span>*/}
                 </div>
                 <div className={s.book_rating}>
                     <div className={s.book_rating_num}>
@@ -35,12 +35,10 @@ const Book = ({ book }) => {
                     </div>
                 </div>
                 <div className={s.book_publisher}>
-                    <span>Видавницство:</span>
+                    <span>Видавництво:</span>
                     <span className={s.book_publisher_link}>{book.publisher}</span>
                 </div>
             </div>
         </div>
     );
 };
-
-export default Book;
