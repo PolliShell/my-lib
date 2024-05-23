@@ -31,7 +31,7 @@ const signup = async (req, res) => {
       email: savedUser.email,
       id: savedUser.id,
     };
-    res.status(200).json({ loggedIn: true, email: savedUser.email, savedUser });
+    res.status(200).json({ loggedIn: true, email: savedUser.email });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ error: "Internal Server Error" });
