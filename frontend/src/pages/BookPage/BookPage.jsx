@@ -7,7 +7,7 @@ import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
 import axios from "axios";
 import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
 import s from "./BookPage.module.css";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export const BookPage = () => {
   const { id } = useParams();
@@ -16,21 +16,15 @@ export const BookPage = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        if (!id) {
-          // If ID is undefined, do not proceed with the fetch
-          return;
-        }
-
-        const response = await axios.get(`http://localhost:3000/books/${id}`);
-        setBook(response.data);
+        const res = await axios.get(`http://localhost:3000/books/${id}`);
+        setBook(res.data);
       } catch (error) {
-        console.error('Failed to fetch book', error);
+        console.error("Failed to fetch book", error);
       }
     };
 
     fetchBook();
   }, [id]);
-
 
   if (!book) return <div>Loading...</div>;
 
@@ -77,7 +71,9 @@ export const BookPage = () => {
           </div>
           <div className={s.book_publisher}>
             <span>Видавницство:</span>
-            <span className={s.book_publisher_link}>{book.publishing_house}</span>
+            <span className={s.book_publisher_link}>
+              {book.publishing_house}
+            </span>
           </div>
           <div className={s.book_best_resentment}>
             <h4 className={s.book_resentment_heading}>

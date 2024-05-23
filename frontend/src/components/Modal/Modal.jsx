@@ -3,9 +3,37 @@ import CloseModalIcon from "../../public/Navbar/Modal/close_icon.png";
 import { useState } from "react";
 import { LoginForm } from "./LoginForm/LoginForm";
 import { SignupForm } from "./SignupForm/SignupForm";
+import { FavotiteBooks } from "./FavotiteBooks/FavotiteBooks";
+import { Cart } from "./Cart/Cart";
 
-export const Modal = ({ setIsModalOpen }) => {
-  const [modalType, setModalType] = useState("login"); // login || signup
+export const Modal = ({ setIsModalOpen, type = "login" }) => {
+  const [modalType, setModalType] = useState(type);
+
+  const renderHeading = (type) => {
+    switch (type) {
+      case "signup":
+        return "Реєстрація";
+      case "cart":
+        return "Кошик";
+      case "favorites":
+        return "Обрані книги";
+      default:
+        return "Увійти";
+    }
+  };
+
+  const renderBody = (type) => {
+    switch (type) {
+      case "signup":
+        return <SignupForm setModalType={setModalType} />;
+      case "cart":
+        return <Cart setModalType={setModalType} />;
+      case "favorites":
+        return <FavotiteBooks setModalType={setModalType} />;
+      default:
+        return <LoginForm setModalType={setModalType} />;
+    }
+  };
 
   return (
     <>
@@ -20,13 +48,9 @@ export const Modal = ({ setIsModalOpen }) => {
             alt="close btn"
             onClick={() => setIsModalOpen(false)}
           />
-          <span>{modalType === "login" ? "Вхід" : "Реєстрація"}</span>
+          <span>{renderHeading(modalType)}</span>
         </div>
-        {modalType === "login" ? (
-          <LoginForm setModalType={setModalType} />
-        ) : (
-          <SignupForm setModalType={setModalType} />
-        )}
+        {renderBody(modalType)}
       </div>
     </>
   );

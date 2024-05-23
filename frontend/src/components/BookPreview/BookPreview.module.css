@@ -1,13 +1,14 @@
 .book {
   position: relative;
   cursor: pointer;
+  max-width: 156px;
 }
 
 .book:hover .get_in_favorite_btn {
   display: inline-block;
 }
 
-.book:hover .book_img {
+.book_inner:hover .book_img {
   opacity: 0.8;
 }
 
@@ -36,14 +37,27 @@
 
 .book_actions button {
   font-size: 14px;
-  padding: 2px 4px;
-  border: none;
-  border-radius: 5px;
+  padding: 4px;
+}
+
+.book_show_cart {
+  margin: 0 auto;
+  width: 60%;
+  border-radius: 10px;
+  border: 1px solid #cecece;
+  background: transparent;
 }
 
 .book_buy {
+  border: none;
+  border-radius: 5px;
   background: #3d58b3;
   color: #fff;
+}
+
+.book_addToCart {
+  border: none;
+  border-radius: 5px;
 }
 
 .book:not(:last-child) {

@@ -60,11 +60,13 @@ const getById = async (req, res) => {
       format: bookInfo ? bookInfo.get("format") : null,
       number_of_pages: bookInfo ? bookInfo.get("number_of_pages") : null,
       age_restrictions: bookInfo ? bookInfo.get("age_restrictions") : null,
-      year_of_publication: bookInfo ? bookInfo.get("year_of_publication") : null,
+      year_of_publication: bookInfo
+        ? bookInfo.get("year_of_publication")
+        : null,
       publishing_house: bookInfo ? bookInfo.get("publishing_house") : null,
     };
 
-    res.json(combinedBook);
+    res.status(200).json(combinedBook);
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");

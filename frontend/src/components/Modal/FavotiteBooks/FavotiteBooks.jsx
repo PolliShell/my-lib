@@ -4,9 +4,8 @@ import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 
-export const SignupForm = ({ setModalType }) => {
+export const FavotiteBooks = ({ setModalType }) => {
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -21,11 +20,11 @@ export const SignupForm = ({ setModalType }) => {
     }));
   };
 
-  const handleSignUp = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const user = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/auth/signup`,
+        `${process.env.REACT_APP_BASE_URL}/auth/login`,
         {
           ...formData,
         }
@@ -33,11 +32,11 @@ export const SignupForm = ({ setModalType }) => {
 
       if (!user.data.token) {
         setOpenErrorModal(true);
-        setErrorMsg("Registration failed. Please check your credentials.");
+        setErrorMsg("Login failed. Please check your credentials.");
       }
     } catch (error) {
       setOpenErrorModal(true);
-      setErrorMsg("Registration failed. Please check your credentials.");
+      setErrorMsg("Login failed. Please check your credentials.");
     }
   };
 
@@ -45,23 +44,16 @@ export const SignupForm = ({ setModalType }) => {
     <>
       <div className={s.modal_body}>
         <div className={s.modal_body_header}>
-          <span className={s.modal_body_heading}>Створити профіль</span>
+          <span className={s.modal_body_heading}>Обрані книги</span>
           <span className={s.modal_body_subheading}>
-            Заповніть всі поля нижче, щоб створити свій профіль
+            Увійдіть, щоб мати можливість додавати книги у обране та писати
+            відгуки до прочитаних книг
           </span>
         </div>
         <div className={s.modal_body_quick_auth}>
           <img src={GoogleAuthIcon} alt="google auth" className="google_auth" />
         </div>
-        <form onSubmit={handleSignUp} className={s.modal_body_form}>
-          <input
-            type="username"
-            placeholder="Ім'я та прізвище"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
+        {/* <form onSubmit={handleLogin} className={s.modal_body_form}>
           <input
             type="email"
             placeholder="Пошта"
@@ -79,18 +71,18 @@ export const SignupForm = ({ setModalType }) => {
             required
           />
           <button type="submit" className={s.submitButton}>
-            Зареєструватися
+            Увійти
           </button>
         </form>
         <div className={s.modal_body_register}>
-          <span className={s.modal_body_register_desc}>Вже є профіль?</span>
+          <span className={s.modal_body_register_desc}>Немає профілю?</span>
           <span
             className={s.modal_body_register_link}
-            onClick={() => setModalType("login")}
+            onClick={() => setModalType("signup")}
           >
-            Увійти
+            Зареєструйтесь
           </span>
-        </div>
+        </div> */}
         {openErrorModal ? (
           <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
         ) : (

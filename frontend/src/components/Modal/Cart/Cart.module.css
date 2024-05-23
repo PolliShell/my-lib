@@ -1,0 +1,92 @@
+.cart_items {
+  padding: 15px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.cart_item {
+  border-bottom: 1px solid #cecece;
+  padding: 20px 15px;
+  display: flex;
+}
+
+.cart_item:last-child {
+  border: none;
+}
+
+.cart_item > img {
+  cursor: pointer;
+  object-fit: cover;
+  width: 90px;
+  height: 90px;
+  border-radius: 15px;
+}
+
+.cart_item_info {
+  flex-grow: 2;
+  padding: 8px;
+}
+
+.cart_item_title {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.cart_item_counter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+
+.cart_item_counter button {
+  border: 1px solid #3d58b3;
+  color: #3d58b3;
+  background: transparent;
+  padding: 5px 10px;
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 12px;
+}
+
+.cart_item_counter span {
+  font-size: 14px;
+}
+
+.cart_item_actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+.cart_item_remove {
+  padding: 2px;
+  cursor: pointer;
+}
+
+.cart_item_remove img {
+  width: 20px;
+  height: 20px;
+}
+
+.cart_item_actions span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.cart_items_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+}
+
+.cart_items_info span {
+  font-weight: 500;
+}

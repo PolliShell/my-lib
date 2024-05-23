@@ -7,9 +7,25 @@ import categoriesIcon from "../../public/Navbar/categories.png";
 import searchIcon from "../../public/Navbar/search.png";
 import { Modal } from "../Modal/Modal";
 import { useState } from "react";
+// import { getFromLS } from "../../helpers/LSHelpers";
 
 export const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(null);
+  // const [cartBookCount, setCartBookCount] = useState(0);
+
+  const openModal = (modalType) => {
+    // user passed auth and has his cookie in session
+    setModalType(modalType);
+    // user is not authenticated
+    // setModalType("login");
+    setIsModalOpen(true);
+  };
+
+  // const getCountOfBooksInLS = () => {
+  //   setCartBookCount(getFromLS("cartBooks").length);
+  //   return cartBookCount;
+  // };
 
   return (
     <>
@@ -35,25 +51,35 @@ export const Navbar = () => {
               </div>
             </div>
             <div className={s.nav_links}>
-              <button className={s.nav_link}>
+              <button className={s.nav_link} onClick={() => openModal("cart")}>
+                {/* TO FIX LATER */}
+                {/* {getCountOfBooksInLS ? (
+                  <div className={s.nav_link_cart_counter}>
+                    {() => getCountOfBooksInLS}
+                  </div>
+                ) : (
+                  ""
+                )} */}
                 <img src={cartIcon} alt="cart" />
                 <span>Кошик</span>
               </button>
-              <button className={s.nav_link}>
+              <button
+                className={s.nav_link}
+                onClick={() => openModal("favorites")}
+              >
                 <img src={favoritesIcon} alt="favorites" />
                 <span>Улюблені</span>
               </button>
-              <button
-                className={s.nav_link}
-                onClick={() => setIsModalOpen(true)}
-              >
+              <button className={s.nav_link} onClick={() => openModal("login")}>
                 <img src={accountIcon} alt="account" />
                 <span>Увійти</span>
               </button>
             </div>
           </div>
         </div>
-        {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} />}
+        {isModalOpen && (
+          <Modal setIsModalOpen={setIsModalOpen} type={modalType} />
+        )}
       </nav>
     </>
   );
