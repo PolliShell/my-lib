@@ -1,50 +1,61 @@
+// authControllers.js
 const bcrypt = require("bcrypt");
-const {Parse} = require("parse/node");
+const { Parse } = require("parse/node");
+const jwt = require("jsonwebtoken");
 
-// Функция для регистрации нового пользователя
+const generateAccessToken = (user) => {
+    return jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "15m" }
+    );
+};
+
+const generateRefreshToken = (user) => {
+    return jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "7d" }
+    );
+};
+
+// Function to register a new user
 const signup = async (req, res) => {
-    const {username,email, password} = req.body;
+    const { username, email, password } = req.body;
 
     try {
-        // Проверяем, существует ли пользователь с таким именем
-        const query = new Parse.Query(Parse.User);
-        query.equalTo("email", email);
-        const existingUser = await query.first();
-
-        if (existingUser) {
-            return res
-                .status(400)
-                .json({loggedIn: false, status: "Account already signed up"});
-        }
-
-        // Создаем нового пользователя
+        // Create new user
         const newUser = new Parse.User();
         newUser.set("username", username);
         newUser.set("email", email);
         newUser.set("password", password);
 
+        // Generate tokens
+        const accessToken = generateAccessToken(newUser);
+        const refreshToken = generateRefreshToken(newUser);
 
-        // Сохраняем пользователя
+        // Set tokens to user object
+        newUser.set("accessToken", accessToken);
+        newUser.set("refreshToken", refreshToken);
+
+        // Save user
         const savedUser = await newUser.signUp();
 
-        // Возвращаем успешный результат
-        req.session.user = {
-            email: savedUser.email,
-            id: savedUser.id,
-        };
-        res.status(200).json({loggedIn: true, email: savedUser.email});
+        // Return tokens
+        res.status(200).json({
+            loggedIn: true,
+            email: savedUser.get("email"),
+            accessToken,
+            refreshToken,
+        });
     } catch (error) {
         console.error("Signup error:", error);
-        res.status(500).json({error: "Internal Server Error"});
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
-// Функция для входа пользователя
-Parse.initialize(process.env.PARSE_APP_ID, process.env.PARSE_JAVASCRIPT_KEY, process.env.PARSE_MASTER_KEY);
-Parse.serverURL = process.env.PARSE_SERVER_URL;
-
 const login = async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
         const userQuery = new Parse.Query(Parse.User);
@@ -52,17 +63,27 @@ const login = async (req, res) => {
         const user = await userQuery.first();
 
         if (!user) {
-            return res.status(401).json({loggedIn: false, message: "Invalid email or password"});
+            return res.status(401).json({ loggedIn: false, message: "Invalid email or password" });
         }
 
+        // Authenticate user
         const loggedInUser = await Parse.User.logIn(email, password);
-        console.log("User Data: ", loggedInUser.toJSON());
-        res.json({loggedIn: true, user: loggedInUser.toJSON()});
+
+        // Generate tokens
+        const accessToken = generateAccessToken(loggedInUser);
+        const refreshToken = generateRefreshToken(loggedInUser);
+
+        // Return tokens
+        res.json({
+            loggedIn: true,
+            user: loggedInUser.toJSON(),
+            accessToken,
+            refreshToken
+        });
     } catch (error) {
         console.error("Login error: ", error);
-        res.status(401).json({loggedIn: false, message: "Invalid email or password"});
+        res.status(401).json({ loggedIn: false, message: "Invalid email or password" });
     }
-}
+};
 
-
-module.exports = {signup, login};
+module.exports = { signup,login };

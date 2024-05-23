@@ -14,10 +14,10 @@ const SignupForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/auth/signup", {
-        username: username,
-        email: email,
-        birth_date: birthDate,
-        password: password,
+        username,
+        email,
+        birthDate,  // Correct this if the backend expects 'birth_date'
+        password,
       });
       if (response.data.loggedIn) {
         alert("Registered successfully!");
@@ -26,7 +26,7 @@ const SignupForm = () => {
         console.log("Signup failed:", response.data.status);
       }
     } catch (error) {
-      console.error("Error during signup:", error);
+      console.error("Error during signup:", error.response?.data || error.message);
     }
   };
 

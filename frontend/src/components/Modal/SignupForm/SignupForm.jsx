@@ -24,21 +24,17 @@ export const SignupForm = ({ setModalType }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      const user = await axios.post(
-        `http://localhost:3000/auth/signup`,
-        {
-          ...formData,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/auth/signup", {
+        ...formData,
+      });
 
-      if (user.data.loggedIn) {
-        return console.log("User has been successfully registered");
-      }
-      if (!user.data.token) {
-        setOpenErrorModal(true);
-        setErrorMsg("Registration failed. Please check your credentials.");
-      }
-      // TODO: set user token from response to LS
+      const { accessToken, refreshToken } = response.data;
+
+      // Save tokens in local storage
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      console.log("User has been successfully registered");
     } catch (error) {
       setOpenErrorModal(true);
       setErrorMsg("Registration failed. Please check your credentials.");
