@@ -31,10 +31,14 @@ export const SignupForm = ({ setModalType }) => {
         }
       );
 
+      if (user.data.loggedIn) {
+        return console.log("User has been successfully registered");
+      }
       if (!user.data.token) {
         setOpenErrorModal(true);
         setErrorMsg("Registration failed. Please check your credentials.");
       }
+      // TODO: set user token from response to LS
     } catch (error) {
       setOpenErrorModal(true);
       setErrorMsg("Registration failed. Please check your credentials.");

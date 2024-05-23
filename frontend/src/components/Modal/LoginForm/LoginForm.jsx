@@ -23,17 +23,18 @@ export const LoginForm = ({ setModalType }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const user = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/auth/login`,
-        {
-          ...formData,
-        }
-      );
+      const user = await axios.post(`http://localhost:3000/auth/login`, {
+        ...formData,
+      });
 
+      if (user.data.loggedIn) {
+        return console.log("User has been successfully loginned");
+      }
       if (!user.data.token) {
         setOpenErrorModal(true);
         setErrorMsg("Login failed. Please check your credentials.");
       }
+      // TODO: set user token from response to LS
     } catch (error) {
       setOpenErrorModal(true);
       setErrorMsg("Login failed. Please check your credentials.");

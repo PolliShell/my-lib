@@ -3,7 +3,7 @@ const { Parse } = require("parse/node");
 
 // Функция для регистрации нового пользователя
 const signup = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     // Проверяем, существует ли пользователь с таким именем
@@ -19,9 +19,9 @@ const signup = async (req, res) => {
 
     // Создаем нового пользователя
     const newUser = new Parse.User();
+    newUser.set("username", username);
     newUser.set("email", email);
     newUser.set("password", password);
-    newUser.set("username", username);
 
     // Сохраняем пользователя
     const savedUser = await newUser.signUp();
@@ -31,7 +31,7 @@ const signup = async (req, res) => {
       email: savedUser.email,
       id: savedUser.id,
     };
-    res.status(200).json({ loggedIn: true, email: savedUser.email });
+    res.status(200).json({ loggedIn: true, email: savedUser.email, savedUser });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ error: "Internal Server Error" });
