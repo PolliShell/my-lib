@@ -11,10 +11,16 @@ const LoginForm = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("Attempting login with email:", email);
     try {
       const response = await axios.post(
           "http://localhost:3000/auth/login",
-          { email, password } // Передаем email вместо username
+          { email, password },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
       );
       if (response.data.loggedIn) {
         console.log("Logged in successfully!");

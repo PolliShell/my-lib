@@ -25,7 +25,7 @@ export const SignupForm = ({ setModalType }) => {
     e.preventDefault();
     try {
       const user = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/auth/signup`,
+        `http://localhost:3000/auth/signup`,
         {
           ...formData,
         }

@@ -8,8 +8,13 @@
   <body>
     <h2>Login</h2>
     <form action="/auth/login" method="POST">
-      <label for="username">Username:</label><br />
-      <input type="text" id="username" name="username" /><br />
+      <input
+              type="email"
+              placeholder="Пошта"
+              name="email"
+
+              required
+      />
       <label for="password">Password:</label><br />
       <input type="password" id="password" name="password" /><br /><br />
       <input type="submit" value="Login" />
