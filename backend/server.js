@@ -3,6 +3,7 @@ const cors = require("cors");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const bookRoutes = require("./routes/bookRoutes");
+const genreRoutes = require("./routes/genresRoutes");
 const authorRoutes = require("./routes/authorRoutes");
 const authRouter = require("./routes/authRoutes");
 require("dotenv").config();
@@ -31,6 +32,7 @@ app.use(
 app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
 app.use("/auth", authRouter);
+app.use("/genre", genreRoutes);
 
 const PORT = process.env.APP_PORT;
 
