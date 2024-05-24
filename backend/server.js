@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const bookRoutes = require("./routes/bookRoutes");
 const genreRoutes = require("./routes/genresRoutes");
 const authorRoutes = require("./routes/authorRoutes");
-const authRouter = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes")
 require("dotenv").config();
 
 const app = express();
@@ -31,8 +32,9 @@ app.use(
 
 app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
-app.use("/auth", authRouter);
+app.use("/auth", authRoutes);
 app.use("/genre", genreRoutes);
+app.use("/user", userRoutes);
 
 const PORT = process.env.APP_PORT;
 
