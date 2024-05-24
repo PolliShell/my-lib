@@ -3,6 +3,7 @@ import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
 import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { addToLS } from "../../../helpers/LSHelpers";
 
 export const SignupForm = ({ setModalType }) => {
   const [formData, setFormData] = useState({
@@ -24,17 +25,19 @@ export const SignupForm = ({ setModalType }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/auth/signup", {
+      const res = await axios.post("http://localhost:3000/auth/signup", {
         ...formData,
       });
 
-      const { accessToken, refreshToken } = response.data;
+      if (!res.data.loggedIn) {
+        setOpenErrorModal(true);
+        setErrorMsg(res.data.message);
+        return;
+      }
 
-      // Save tokens in local storage
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-
-      console.log("User has been successfully registered");
+      const token = res.data.accessToken;
+      addToLS("userToken", token);
+      window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);
       setErrorMsg("Registration failed. Please check your credentials.");

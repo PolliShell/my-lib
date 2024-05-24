@@ -6,10 +6,12 @@ import accountIcon from "../../public/Navbar/account.png";
 import categoriesIcon from "../../public/Navbar/categories.png";
 import searchIcon from "../../public/Navbar/search.png";
 import { Modal } from "../Modal/Modal";
-import { useState } from "react";
-// import { getFromLS } from "../../helpers/LSHelpers";
+import { useState, useEffect } from "react";
+import useAuth from "../../helpers/useAuth";
 
 export const Navbar = () => {
+  const isAuthenticated = useAuth();
+  const [user, setUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
   // const [cartBookCount, setCartBookCount] = useState(0);
@@ -21,11 +23,6 @@ export const Navbar = () => {
     // setModalType("login");
     setIsModalOpen(true);
   };
-
-  // const getCountOfBooksInLS = () => {
-  //   setCartBookCount(getFromLS("cartBooks").length);
-  //   return cartBookCount;
-  // };
 
   return (
     <>
@@ -70,6 +67,7 @@ export const Navbar = () => {
                 <img src={favoritesIcon} alt="favorites" />
                 <span>Улюблені</span>
               </button>
+              {isAuthenticated && <span>Увійти</span>}
               <button className={s.nav_link} onClick={() => openModal("login")}>
                 <img src={accountIcon} alt="account" />
                 <span>Увійти</span>

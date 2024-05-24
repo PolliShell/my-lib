@@ -3,6 +3,7 @@ import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
 import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { addToLS } from "../../../helpers/LSHelpers";
 
 export const LoginForm = ({ setModalType }) => {
   const [formData, setFormData] = useState({
@@ -23,14 +24,20 @@ export const LoginForm = ({ setModalType }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/auth/login", formData);
+      const res = await axios.post(
+        "http://localhost:3000/auth/login",
+        formData
+      );
 
-      if (!response.data.loggedIn) {
+      if (!res.data.loggedIn) {
         setOpenErrorModal(true);
-        setErrorMsg(response.data.message);
-      } else {
-        console.log("User Data: ", response.data.user);
+        setErrorMsg(res.data.message);
+        return;
       }
+
+      const token = res.data.accessToken;
+      addToLS("userToken", token);
+      window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);
       setErrorMsg("Login failed. Please check your credentials.");
@@ -52,20 +59,20 @@ export const LoginForm = ({ setModalType }) => {
         </div>
         <form onSubmit={handleLogin} className={s.modal_body_form}>
           <input
-              type="email"
-              placeholder="Пошта"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
+            type="email"
+            placeholder="Пошта"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
           <input
-              type="password"
-              placeholder="Пароль"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
+            type="password"
+            placeholder="Пароль"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
           />
           <button type="submit" className={s.submitButton}>
             Увійти
@@ -74,16 +81,16 @@ export const LoginForm = ({ setModalType }) => {
         <div className={s.modal_body_register}>
           <span className={s.modal_body_register_desc}>Немає профілю?</span>
           <span
-              className={s.modal_body_register_link}
-              onClick={() => setModalType("signup")}
+            className={s.modal_body_register_link}
+            onClick={() => setModalType("signup")}
           >
             Зареєструйтесь
           </span>
         </div>
         {openErrorModal ? (
-            <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
+          <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
         ) : (
-            ""
+          ""
         )}
       </div>
     </>
