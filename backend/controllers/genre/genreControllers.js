@@ -18,6 +18,31 @@ const getAll = async (req, res) => {
     }
 };
 
+const getBooksByGenre = async (req, res) => {
+    const genre = req.params.genre;
+
+    const BooksInfo = Parse.Object.extend('books_info');
+    const query = new Parse.Query(BooksInfo);
+    query.containedIn('genres', [genre]);
+
+    try {
+        const booksInfoResults = await query.find();
+
+        const bookIds = booksInfoResults.map((bookInfo) => bookInfo.get('book_id'));
+
+        const Books = Parse.Object.extend('books');
+        const bookQuery = new Parse.Query(Books);
+        bookQuery.containedIn('objectId', bookIds);
+
+        const booksResults = await bookQuery.find();
+
+        res.status(200).json(booksResults);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports={
+    getBooksByGenre,
     getAll,
 }

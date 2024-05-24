@@ -6,4 +6,6 @@ const {getBooksByGenres} = require("../controllers/genre/genreControllers");
 
 router.get("/", genreController.getAll);
 
+router.get("/:genre", genreController.getBooksByGenre);
+
 module.exports = router;
