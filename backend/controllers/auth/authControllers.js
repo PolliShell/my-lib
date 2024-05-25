@@ -94,6 +94,22 @@ const login = async (req, res) => {
   }
 };
 
+const me = async (req, res) => {
+  try {
+    const query = new Parse.Query(Parse.User);
+    const user = await query.select("username").get(req.user?.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    res.status(500).send(e.message);
+  }
+};
+
 const authenticate = async (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) {
@@ -104,10 +120,10 @@ const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.user = decoded;
     next();
-  } catch (error) {
-    console.log(error);
-    res.status(400).send("Invalid token.");
+  } catch (e) {
+    console.log(e);
+    res.status(401).send(e.message);
   }
 };
 
-module.exports = { signup, login, authenticate };
+module.exports = { signup, login, me, authenticate };

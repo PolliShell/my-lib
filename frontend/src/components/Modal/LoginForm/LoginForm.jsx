@@ -3,7 +3,7 @@ import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
 import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
-import { addToLS } from "../../../helpers/LSHelpers";
+import { setLSItem } from "../../../helpers/LSHelpers";
 
 export const LoginForm = ({ setModalType }) => {
   const [formData, setFormData] = useState({
@@ -35,8 +35,7 @@ export const LoginForm = ({ setModalType }) => {
         return;
       }
 
-      const token = res.data.accessToken;
-      addToLS("userToken", token);
+      setLSItem("userToken", res.data.accessToken);
       window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);

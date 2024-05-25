@@ -1,0 +1,31 @@
+.user_modal {
+  position: absolute;
+  bottom: -70px;
+  background: #fff;
+  border: 1px solid #e6e8ee;
+  border-radius: 5px;
+}
+
+.user_modal_actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.user_modal_actions span {
+  max-width: 100%;
+  cursor: pointer;
+  padding: 5px 15px;
+  font-size: 15px;
+  border-bottom: 1px solid #e6e8ee;
+}
+
+.user_modal_actions span:hover {
+  background: #f6f8fa;
+}
+
+.user_modal_actions span:last-child {
+  border: none;
+  color: #c05c5c;
+}

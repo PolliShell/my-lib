@@ -1,7 +1,7 @@
 import s from "./Cart.module.css";
 import { useState } from "react";
 import { toBookPage } from "../../../helpers/toBookPage";
-import { getFromLS, removeItemFromLS } from "../../../helpers/LSHelpers";
+import { getLSItem, removeLSItem } from "../../../helpers/LSHelpers";
 import RemoveItemImg from "../../../public/Navbar/Modal/bin icon.png";
 
 export const CartItem = ({ book, totalPrice, setTotalPrice, setCartBooks }) => {
@@ -22,8 +22,8 @@ export const CartItem = ({ book, totalPrice, setTotalPrice, setCartBooks }) => {
   };
 
   const removeCartItem = (id) => {
-    removeItemFromLS("cartBooks", "id", id);
-    setCartBooks(getFromLS("cartBooks"));
+    removeLSItem("cartBooks", "id", id);
+    setCartBooks(getLSItem("cartBooks"));
   };
 
   return (

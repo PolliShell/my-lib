@@ -3,7 +3,7 @@ import CloseModalIcon from "../../public/Navbar/Modal/close_icon.png";
 import { useState } from "react";
 import { LoginForm } from "./LoginForm/LoginForm";
 import { SignupForm } from "./SignupForm/SignupForm";
-import { FavotiteBooks } from "./FavotiteBooks/FavotiteBooks";
+import { FavotiteBooks } from "./FavoriteBooks/FavoriteBooks";
 import { Cart } from "./Cart/Cart";
 
 export const Modal = ({ setIsModalOpen, type = "login" }) => {

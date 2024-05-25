@@ -6,21 +6,35 @@ import accountIcon from "../../public/Navbar/account.png";
 import categoriesIcon from "../../public/Navbar/categories.png";
 import searchIcon from "../../public/Navbar/search.png";
 import { Modal } from "../Modal/Modal";
-import { useState, useEffect } from "react";
-import useAuth from "../../helpers/useAuth";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../../auth/AuthProvider";
+import { UserModal } from "../Modal/UserModal/UserModal";
+import { getLSItem } from "../../helpers/LSHelpers";
 
 export const Navbar = () => {
-  const isAuthenticated = useAuth();
-  const [user, setUser] = useState(null);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
-  // const [cartBookCount, setCartBookCount] = useState(0);
+  const [booksCount, setBooksCount] = useState(0);
+
+  useEffect(() => {
+    const count = getLSItem("cartBooks")?.length;
+    setBooksCount(count);
+  }, [booksCount]);
 
   const openModal = (modalType) => {
-    // user passed auth and has his cookie in session
-    setModalType(modalType);
-    // user is not authenticated
-    // setModalType("login");
+    if (modalType === "cart") {
+      setModalType("cart");
+      setIsModalOpen(true);
+      return;
+    }
+
+    if (isAuthenticated) {
+      setModalType(modalType);
+    } else {
+      setModalType("login");
+    }
     setIsModalOpen(true);
   };
 
@@ -50,13 +64,11 @@ export const Navbar = () => {
             <div className={s.nav_links}>
               <button className={s.nav_link} onClick={() => openModal("cart")}>
                 {/* TO FIX LATER */}
-                {/* {getCountOfBooksInLS ? (
-                  <div className={s.nav_link_cart_counter}>
-                    {() => getCountOfBooksInLS}
-                  </div>
+                {booksCount ? (
+                  <div className={s.nav_link_cart_counter}>{booksCount}</div>
                 ) : (
                   ""
-                )} */}
+                )}
                 <img src={cartIcon} alt="cart" />
                 <span>Кошик</span>
               </button>
@@ -67,11 +79,24 @@ export const Navbar = () => {
                 <img src={favoritesIcon} alt="favorites" />
                 <span>Улюблені</span>
               </button>
-              {isAuthenticated && <span>Увійти</span>}
-              <button className={s.nav_link} onClick={() => openModal("login")}>
-                <img src={accountIcon} alt="account" />
-                <span>Увійти</span>
-              </button>
+              {user ? (
+                <button
+                  className={s.nav_link}
+                  onClick={() => setUserModalOpen(true)}
+                >
+                  {isUserModalOpen && <UserModal />}
+                  <img src={accountIcon} alt="account" />
+                  <span>{user.username}</span>
+                </button>
+              ) : (
+                <button
+                  className={s.nav_link}
+                  onClick={() => openModal("login")}
+                >
+                  <img src={accountIcon} alt="account" />
+                  <span>Увійти</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

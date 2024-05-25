@@ -3,13 +3,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { CartItem } from "./CartItem";
-import { getFromLS } from "../../../helpers/LSHelpers";
+import { getLSItem } from "../../../helpers/LSHelpers";
 
 export const Cart = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [openErrorModal, setOpenErrorModal] = useState(false);
   const [totalPrice, setTotalPrice] = useState(null);
-  const [cartBooks, setCartBooks] = useState(getFromLS("cartBooks"));
+  const [cartBooks, setCartBooks] = useState(getLSItem("cartBooks"));
 
   useEffect(() => {
     const res = cartBooks

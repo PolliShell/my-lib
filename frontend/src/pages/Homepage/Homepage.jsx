@@ -1,8 +1,8 @@
+import s from "./Homepage.module.css";
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // Импортируем Axios
+import axios from "axios";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { BookPreview } from "../../components/BookPreview/BookPreview";
-import "./Homepage.css";
 
 export const Homepage = () => {
   const [books, setBooks] = useState([]);
@@ -10,8 +10,8 @@ export const Homepage = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/books");
-        setBooks(response.data);
+        const res = await axios.get("http://localhost:3000/books");
+        setBooks(res.data);
       } catch (error) {
         console.error("Failed to fetch books", error);
       }
@@ -21,24 +21,24 @@ export const Homepage = () => {
   }, []);
 
   return (
-      <>
-        <Navbar />
-        <main className="main container">
-          <section className="popular-books">
-            <h2>Популярні книги</h2>
-            <div className="books">
-              {books.map((book) => (
-                  <BookPreview key={book.objectId} book={book} />
-              ))}
-            </div>
-          </section>
-          <section className="stock-books">
-            <h2>Акційні книги</h2>
-            <div className="books">
-              {/* Render discounted books similarly */}
-            </div>
-          </section>
-        </main>
-      </>
-
-);};
+    <>
+      <Navbar />
+      <main className={`${s.main} container`}>
+        <section>
+          <h2>Популярні книги</h2>
+          <div className={s.books}>
+            {books.map((book) => (
+              <BookPreview key={book.objectId} book={book} />
+            ))}
+          </div>
+        </section>
+        <section>
+          <h2>Акційні книги</h2>
+          <div className={s.books}>
+            {/* Render discounted books similarly */}
+          </div>
+        </section>
+      </main>
+    </>
+  );
+};

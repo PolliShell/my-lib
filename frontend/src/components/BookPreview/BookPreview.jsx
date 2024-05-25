@@ -1,57 +1,51 @@
 import s from "./BookPreview.module.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { Modal } from "../Modal/Modal";
 import FavoritesIcon from "../../public/Navbar/favorites.png";
 import { toBookPage } from "../../helpers/toBookPage";
-import {
-  addToLS,
-  checkObjectByPropInLS,
-  getFromLS,
-} from "../../helpers/LSHelpers";
-
-const buyBook = () => {
-  // Логика для покупки книги
-};
+import { setLSItem, getLSItem, checkLSItem } from "../../helpers/LSHelpers";
+import { AuthContext } from "../../auth/AuthProvider";
 
 export const BookPreview = ({ book }) => {
+  const { isAuthenticated } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(null); // login || signup || cart || favorites
+  const [modalType, setModalType] = useState(null);
 
-  const getInFavorite = () => {
-    // user passed auth and has his cookie in session:
-    setModalType("favorites");
-    // user is not authenticated:
-    // setModalType("login");
+  const openModal = (modalType) => {
+    if (modalType === "cart") {
+      setModalType("cart");
+      setIsModalOpen(true);
+      return;
+    }
 
+    if (isAuthenticated) {
+      setModalType(modalType);
+    } else {
+      setModalType("login");
+    }
     setIsModalOpen(true);
   };
 
   const addToCart = (book) => {
-    // Логика для добавления в корзину
-    const LS_cartBooks = getFromLS("cartBooks");
-    if (!checkObjectByPropInLS("cartBooks", "id", book.id)) {
+    const LS_cartBooks = getLSItem("cartBooks");
+    if (!checkLSItem("cartBooks", "id", book.id)) {
       LS_cartBooks.push(book);
-      addToLS("cartBooks", LS_cartBooks);
+      setLSItem("cartBooks", LS_cartBooks);
     }
-    // if user passed auth and has his cookie in session:
-    setModalType("cart");
-    // if user is not authenticated: (need to put logic here)
-    // setModalType("login");
-
-    setIsModalOpen(true);
-  };
-
-  const checkBookInLS = (id) => checkObjectByPropInLS("cartBooks", "id", id);
-
-  const showCartModal = () => {
     setModalType("cart");
     setIsModalOpen(true);
   };
+
+  // TODO: opens BuyFormPage with book info
+  const buyBook = () => {};
 
   return (
     <div className={s.book}>
-      <div className={s.get_in_favorite_btn} onClick={getInFavorite}>
+      <div
+        className={s.get_in_favorite_btn}
+        onClick={() => openModal("favorites")}
+      >
         <img src={FavoritesIcon} alt="getInFavoriteIcon" />
       </div>
       <div className={s.book_inner} onClick={() => toBookPage(book.objectId)}>
@@ -64,7 +58,7 @@ export const BookPreview = ({ book }) => {
           </span>
         </div>
       </div>
-      {book.price && !checkBookInLS(book.objectId) ? (
+      {book.price && !checkLSItem("cartBooks", "id", book.objectId) ? (
         <div className={s.book_actions}>
           <button className={s.book_buy} onClick={buyBook}>
             Купити
@@ -85,7 +79,10 @@ export const BookPreview = ({ book }) => {
         </div>
       ) : (
         <div className={s.book_actions}>
-          <button className={s.book_show_cart} onClick={showCartModal}>
+          <button
+            className={s.book_show_cart}
+            onClick={() => openModal("cart")}
+          >
             У корзині
           </button>
         </div>
@@ -98,5 +95,3 @@ export const BookPreview = ({ book }) => {
     </div>
   );
 };
-
-export default BookPreview;

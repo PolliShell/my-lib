@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/auth/authControllers");
 
-router.get("/check", authController.authenticate, (req, res) => {
-  res.status(200).send("Authenticated");
-});
+router.get("/me", authController.authenticate, authController.me);
 router.post("/login", authController.login);
 router.post("/signup", authController.signup);
 
