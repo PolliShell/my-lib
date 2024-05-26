@@ -1,22 +1,16 @@
 const Parse = require("../../config/parseConfig");
 
-const getUserById = async (req, res) => {
-  const userId = req.params?.id;
+const getUserById = async (userId) => {
   try {
     const query = new Parse.Query(Parse.User);
     const user = await query.get(userId);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.status(200).json(user);
+    return user ? user.toJSON() : null;
   } catch (error) {
-    console.error("Error fetching user by ID:", error);
-    res.status(500).send(e.message);
+    console.error(`Ошибка при получении пользователя с ID ${userId}: ${error.message}`);
+    return null;
   }
 };
-
 module.exports = {
   getUserById,
 };

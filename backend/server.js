@@ -7,6 +7,7 @@ const genreRoutes = require("./routes/genresRoutes");
 const authorRoutes = require("./routes/authorRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes")
+const cartRoures=require("./routes/cartRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -35,9 +36,11 @@ app.use("/authors", authorRoutes);
 app.use("/auth", authRoutes);
 app.use("/genre", genreRoutes);
 app.use("/user", userRoutes);
+app.use("/cart", cartRoures);
 
 const PORT = process.env.APP_PORT;
 
 app.listen(PORT, () => {
   console.log("Server is running on port 3000");
 });
+
