@@ -8,6 +8,7 @@ const authorRoutes = require("./routes/authorRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes")
 const cartRoures=require("./routes/cartRoutes");
+const favoritesRoutes = require("./routes/favoritesRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -37,6 +38,7 @@ app.use("/auth", authRoutes);
 app.use("/genre", genreRoutes);
 app.use("/user", userRoutes);
 app.use("/cart", cartRoures);
+app.use("/favorites", favoritesRoutes);
 
 const PORT = process.env.APP_PORT;
 
