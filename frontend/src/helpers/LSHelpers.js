@@ -7,14 +7,14 @@ export const setLSItem = (key, value) => {
 };
 
 export const checkLSItem = (key, propName, value) => {
-  const LS_cartBooks = getLSItem(key);
-  return LS_cartBooks.find((b) => b[propName] === value);
+  return getLSItem(key).find((b) => b[propName] === value);
 };
 
 export const removeLSItem = (key, propName, value) => {
   if (checkLSItem(key, propName, value)) {
-    const LS_cartBooks = getLSItem(key);
-    const filteredCartBooks = LS_cartBooks.filter((b) => b[propName] !== value);
+    const filteredCartBooks = getLSItem(key).filter(
+      (b) => b[propName] !== value
+    );
     setLSItem("cartBooks", filteredCartBooks);
   }
 };

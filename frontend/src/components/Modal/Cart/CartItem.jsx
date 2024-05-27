@@ -1,10 +1,19 @@
 import s from "./Cart.module.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toBookPage } from "../../../helpers/toBookPage";
 import { getLSItem, removeLSItem } from "../../../helpers/LSHelpers";
 import RemoveItemImg from "../../../public/Navbar/Modal/bin icon.png";
+import { AuthContext } from "../../../auth/AuthProvider";
+import { axiosInstance } from "../../../axios/axiosInstance";
 
-export const CartItem = ({ book, totalPrice, setTotalPrice, setCartBooks }) => {
+export const CartItem = ({
+  book,
+  totalPrice,
+  setTotalPrice,
+  cartBooks,
+  setCartBooks,
+}) => {
+  const { isAuthenticated } = useContext(AuthContext);
   const [count, setCount] = useState(1);
   const [price, setPrice] = useState(book.price);
 
@@ -21,23 +30,35 @@ export const CartItem = ({ book, totalPrice, setTotalPrice, setCartBooks }) => {
     }
   };
 
-  const removeCartItem = (id) => {
-    removeLSItem("cartBooks", "id", id);
-    setCartBooks(getLSItem("cartBooks"));
+  const removeItem = async (id) => {
+    if (isAuthenticated) {
+      try {
+        const res = await axiosInstance.delete(`/cart/delete/${id}`);
+        if (res.status) {
+          const filteredBooks = cartBooks.filter((b) => b.objectId !== id);
+          setCartBooks(filteredBooks);
+        }
+      } catch (e) {
+        console.log("Failed deleting item");
+      }
+    } else {
+      removeLSItem("cartBooks", "objectId", id);
+      setCartBooks(getLSItem("cartBooks"));
+    }
   };
 
   return (
     <>
       <div className={s.cart_item}>
         <img
-          src={book.img}
+          src={book.cover_image}
           alt="book cover img"
-          onClick={() => toBookPage(book.id)}
+          onClick={() => toBookPage(book.objectId)}
         />
         <div className={s.cart_item_info}>
           <div
             className={s.cart_item_title}
-            onClick={() => toBookPage(book.id)}
+            onClick={() => toBookPage(book.objectId)}
           >
             {book.title}
           </div>
@@ -62,7 +83,7 @@ export const CartItem = ({ book, totalPrice, setTotalPrice, setCartBooks }) => {
         <div className={s.cart_item_actions}>
           <div
             className={s.cart_item_remove}
-            onClick={() => removeCartItem(book.id)}
+            onClick={() => removeItem(book.objectId)}
           >
             <img src={RemoveItemImg} alt="" />
           </div>

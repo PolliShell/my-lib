@@ -7,7 +7,7 @@ const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "1d" }
   );
 };
 
@@ -44,7 +44,6 @@ const signup = async (req, res) => {
     // Set token to Headers
     res.set("Authorization", `Bearer ${accessToken}`);
 
-    // Return tokens
     res.status(200).json({
       loggedIn: true,
       email: savedUser.get("email"),
@@ -75,12 +74,12 @@ const login = async (req, res) => {
 
     // Generate tokens
     const accessToken = generateAccessToken(loggedInUser);
+    // TODO: need to update user refresh token in DB
     // const refreshToken = generateRefreshToken(loggedInUser);
 
     // Set token to Headers
     res.set("Authorization", `Bearer ${accessToken}`);
 
-    // Return tokens
     res.json({
       loggedIn: true,
       user: loggedInUser.toJSON(),

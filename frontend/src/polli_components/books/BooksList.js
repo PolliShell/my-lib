@@ -9,7 +9,7 @@
 //     useEffect(() => {
 //         const fetchBooks = async () => {
 //             try {
-//                 const response = await axios.get("http://localhost:3000/books/");
+//                 const response = await axiosInstance.get("http://localhost:3000/books/");
 //                 setBooks(response.data);
 //                 setLoading(false);
 //             } catch (err) {

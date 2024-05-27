@@ -29,8 +29,7 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   const { id } = req.params;
   const Books = Parse.Object.extend("books");
-  const query = new Parse.Query(Books);
-  query.equalTo("objectId", id);
+  const query = new Parse.Query(Books).equalTo("objectId", id);
   try {
     const book = await query.first();
     if (!book) {
@@ -39,31 +38,16 @@ const getById = async (req, res) => {
 
     // Fetch additional information from books_info table
     const BooksInfo = Parse.Object.extend("books_info");
-    const infoQuery = new Parse.Query(BooksInfo);
-    infoQuery.equalTo("book_id", id);
+    const infoQuery = new Parse.Query(BooksInfo).equalTo("book_id", id);
     const bookInfo = await infoQuery.first();
+
+    const author = await getAuthorById(book.get("author_id"));
 
     // Combine book details with additional information
     const combinedBook = {
-      objectId: book.id,
-      createdAt: book.createdAt,
-      updatedAt: book.updatedAt,
-      ACL: book.ACL,
-      price: book.get("price"),
-      title: book.get("title"),
-      author_id: book.get("author_id"),
-      cover_image: book.get("cover_image"),
-      description: book.get("description"),
-      ISBN: bookInfo ? bookInfo.get("ISBN") : null,
-      language: bookInfo ? bookInfo.get("language") : null,
-      cover_type: bookInfo ? bookInfo.get("cover_type") : null,
-      format: bookInfo ? bookInfo.get("format") : null,
-      number_of_pages: bookInfo ? bookInfo.get("number_of_pages") : null,
-      age_restrictions: bookInfo ? bookInfo.get("age_restrictions") : null,
-      year_of_publication: bookInfo
-        ? bookInfo.get("year_of_publication")
-        : null,
-      publishing_house: bookInfo ? bookInfo.get("publishing_house") : null,
+      ...book.toJSON(),
+      ...bookInfo.toJSON(),
+      author_name: author.full_name,
     };
 
     res.status(200).json(combinedBook);

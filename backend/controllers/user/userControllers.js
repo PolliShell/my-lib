@@ -7,7 +7,7 @@ const getUserById = async (userId) => {
 
     return user ? user.toJSON() : null;
   } catch (error) {
-    console.error(`Ошибка при получении пользователя с ID ${userId}: ${error.message}`);
+    console.error("Failed fetching user by id:", error.message);
     return null;
   }
 };

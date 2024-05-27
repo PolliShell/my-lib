@@ -6,6 +6,7 @@ import FavoritesIcon from "../../public/Navbar/favorites.png";
 import { toBookPage } from "../../helpers/toBookPage";
 import { setLSItem, getLSItem, checkLSItem } from "../../helpers/LSHelpers";
 import { AuthContext } from "../../auth/AuthProvider";
+import { axiosInstance } from "../../axios/axiosInstance";
 
 export const BookPreview = ({ book }) => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -27,25 +28,38 @@ export const BookPreview = ({ book }) => {
     setIsModalOpen(true);
   };
 
-  const addToCart = (book) => {
-    const LS_cartBooks = getLSItem("cartBooks");
-    if (!checkLSItem("cartBooks", "id", book.id)) {
-      LS_cartBooks.push(book);
-      setLSItem("cartBooks", LS_cartBooks);
+  const addToCart = async () => {
+    if (isAuthenticated) {
+      await axiosInstance.post("/cart/add", { bookId: book.objectId });
+    } else {
+      const LS_cartBooks = getLSItem("cartBooks");
+      if (!checkLSItem("cartBooks", "objectId", book.objectId)) {
+        LS_cartBooks.push(book);
+        setLSItem("cartBooks", LS_cartBooks);
+      }
     }
     setModalType("cart");
     setIsModalOpen(true);
   };
 
-  // TODO: opens BuyFormPage with book info
-  const buyBook = () => {};
+  const addToFavorites = async () => {
+    await axiosInstance.post("/favorites/add", { bookId: book.objectId });
+    openModal("favorites");
+  };
+
+  // TODO: add removeFromFavorites on this component
+
+  const checkCartItem = (id) => {
+    if (isAuthenticated) {
+      // TODO: make request to DB if book exists there
+    }
+
+    return checkLSItem("cartBooks", "objectId", id);
+  };
 
   return (
     <div className={s.book}>
-      <div
-        className={s.get_in_favorite_btn}
-        onClick={() => openModal("favorites")}
-      >
+      <div className={s.get_in_favorite_btn} onClick={addToFavorites}>
         <img src={FavoritesIcon} alt="getInFavoriteIcon" />
       </div>
       <div className={s.book_inner} onClick={() => toBookPage(book.objectId)}>
@@ -58,23 +72,10 @@ export const BookPreview = ({ book }) => {
           </span>
         </div>
       </div>
-      {book.price && !checkLSItem("cartBooks", "id", book.objectId) ? (
+      {!checkCartItem(book.objectId) ? (
         <div className={s.book_actions}>
-          <button className={s.book_buy} onClick={buyBook}>
+          <button className={s.book_buy} onClick={addToCart}>
             Купити
-          </button>
-          <button
-            className={s.book_addToCart}
-            onClick={() =>
-              addToCart({
-                id: book.objectId,
-                img: book.cover_image,
-                title: book.title,
-                price: book.price,
-              })
-            }
-          >
-            До корзини
           </button>
         </div>
       ) : (

@@ -3,7 +3,7 @@ import CloseModalIcon from "../../public/Navbar/Modal/close_icon.png";
 import { useState } from "react";
 import { LoginForm } from "./LoginForm/LoginForm";
 import { SignupForm } from "./SignupForm/SignupForm";
-import { FavotiteBooks } from "./FavoriteBooks/FavoriteBooks";
+import { Favorites } from "./Favorites/Favorites";
 import { Cart } from "./Cart/Cart";
 
 export const Modal = ({ setIsModalOpen, type = "login" }) => {
@@ -24,12 +24,13 @@ export const Modal = ({ setIsModalOpen, type = "login" }) => {
 
   const renderBody = (type) => {
     switch (type) {
+      // FIX: remove setModalType and check
       case "signup":
         return <SignupForm setModalType={setModalType} />;
       case "cart":
         return <Cart setModalType={setModalType} />;
       case "favorites":
-        return <FavotiteBooks setModalType={setModalType} />;
+        return <Favorites setModalType={setModalType} />;
       default:
         return <LoginForm setModalType={setModalType} />;
     }
