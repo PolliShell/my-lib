@@ -11,16 +11,16 @@ router.get("/", function (req, res) {
 });
 
 router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+    "/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/error" }),
-  function (req, res) {
-    res.redirect("/success");
-  }
+    "/auth/google/callback",
+    passport.authenticate("google", {
+        failureRedirect: "/error",
+        successRedirect: "/success",
+    })
 );
 
 router.get("/success", (req, res) => {
