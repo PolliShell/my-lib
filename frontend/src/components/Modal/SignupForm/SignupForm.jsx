@@ -1,9 +1,9 @@
 import s from "../Modal.module.css";
 import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
-import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { setLSItem } from "../../../helpers/LSHelpers";
+import { axiosInstance } from "../../../axios/axiosInstance";
 
 export const SignupForm = ({ setModalType }) => {
   const [formData, setFormData] = useState({
@@ -25,17 +25,15 @@ export const SignupForm = ({ setModalType }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/auth/signup", {
-        ...formData,
-      });
+      const res = await axiosInstance.post("/auth/signup", formData);
 
-      if (!res.data.loggedIn) {
+      if (!res.loggedIn) {
         setOpenErrorModal(true);
-        setErrorMsg(res.data.message);
+        setErrorMsg(res.message);
         return;
       }
 
-      setLSItem("userToken", res.data.accessToken);
+      setLSItem("userToken", res.accessToken);
       window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);

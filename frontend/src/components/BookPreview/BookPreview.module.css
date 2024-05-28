@@ -37,31 +37,20 @@
 
 .book_actions button {
   font-size: 14px;
-  padding: 4px;
+  padding: 6px;
+  width: 100%;
+  border-radius: 15px;
 }
 
 .book_show_cart {
-  margin: 0 auto;
-  width: 60%;
-  border-radius: 10px;
   border: 1px solid #cecece;
   background: transparent;
 }
 
 .book_buy {
   border: none;
-  border-radius: 5px;
   background: #3d58b3;
   color: #fff;
-}
-
-.book_addToCart {
-  border: none;
-  border-radius: 5px;
-}
-
-.book:not(:last-child) {
-  margin-right: 30px;
 }
 
 .book_img {

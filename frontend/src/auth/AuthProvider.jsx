@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getLSItem } from "../helpers/LSHelpers";
-import axios from "axios";
+import { axiosInstance } from "../axios/axiosInstance";
 
 export const AuthContext = createContext();
 
@@ -10,24 +9,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = getLSItem("userToken");
-      if (!token) {
-        setIsAuthenticated(false);
-        return;
-      }
-
       try {
-        const res = await axios.get("http://localhost:3000/auth/me", {
-          headers: { Authorization: token },
-        });
+        const res = await axiosInstance.get("/auth/me");
 
-        if (!res.data) {
+        if (!res) {
           setIsAuthenticated(false);
           return;
         }
 
         setIsAuthenticated(true);
-        setUser(res.data);
+        setUser(res);
       } catch (error) {
         setIsAuthenticated(false);
       }

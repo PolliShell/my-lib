@@ -1,4 +1,4 @@
-.cart_items {
+.fav_items {
   padding: 15px 5px;
   display: flex;
   flex-direction: column;
@@ -6,17 +6,17 @@
   align-items: stretch;
 }
 
-.cart_item {
+.fav_item {
   border-bottom: 1px solid #cecece;
   padding: 20px 15px;
   display: flex;
 }
 
-.cart_item:last-child {
+.fav_item:last-child {
   border: none;
 }
 
-.cart_item > img {
+.fav_item > img {
   cursor: pointer;
   object-fit: cover;
   width: 90px;
@@ -24,12 +24,12 @@
   border-radius: 15px;
 }
 
-.cart_item_info {
+.fav_item_info {
   flex-grow: 2;
   padding: 8px;
 }
 
-.cart_item_title {
+.fav_item_title {
   cursor: pointer;
   font-size: 15px;
   font-weight: 500;
@@ -37,14 +37,14 @@
   display: inline-block;
 }
 
-.cart_item_counter {
+.fav_item_counter {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 5px;
 }
 
-.cart_item_counter button {
+.fav_item_counter button {
   border: 1px solid #3d58b3;
   color: #3d58b3;
   background: transparent;
@@ -54,11 +54,11 @@
   border-radius: 12px;
 }
 
-.cart_item_counter span {
+.fav_item_counter span {
   font-size: 14px;
 }
 
-.cart_item_actions {
+.fav_item_actions {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -66,40 +66,40 @@
   padding: 8px;
 }
 
-.cart_item_remove {
+.fav_item_remove {
   padding: 2px;
   cursor: pointer;
 }
 
-.cart_item_remove img {
+.fav_item_remove img {
   width: 20px;
   height: 20px;
 }
 
-.cart_item_actions span {
+.fav_item_actions span {
   font-size: 16px;
   font-weight: 500;
 }
 
-.cart_items_info {
+.fav_items_info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 18px 22px;
 }
 
-.cart_items_info span {
+.fav_items_info span {
   font-weight: 500;
 }
 
-.cart_actions {
+.fav_actions {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cart_action_order_btn {
+.fav_action_order_btn {
   color: #fff;
   font-weight: 500;
   font-size: 15px;
@@ -110,7 +110,7 @@
   padding: 8px 35px;
 }
 
-.cart_action_order_btn:disabled {
+.fav_action_order_btn:disabled {
   cursor: default;
   opacity: 0.5;
 }

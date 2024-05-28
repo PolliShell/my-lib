@@ -23,7 +23,8 @@ button {
 }
 
 .container {
-  width: 1450px;
+  max-width: 1450px;
+  width: 100%;
   margin: 0 auto;
 }
 

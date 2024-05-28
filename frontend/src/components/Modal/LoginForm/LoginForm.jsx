@@ -25,8 +25,8 @@ export const LoginForm = ({ setModalType }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-          "http://localhost:3000/auth/login",
-          formData
+        "http://localhost:3000/auth/login",
+        formData
       );
 
       if (!res.data.loggedIn) {
@@ -43,29 +43,19 @@ export const LoginForm = ({ setModalType }) => {
     }
   };
 
-  const handleGoogleAuth = () => {
-    window.location.href = "http://localhost:3000/auth/google"; // Update URL to your Google authentication route
-  };
   return (
-      <>
-        <div className={s.modal_body}>
-          <div className={s.modal_body_header}>
-            <span className={s.modal_body_heading}>Увійти в кабінет</span>
-            <span className={s.modal_body_subheading}>
+    <>
+      <div className={s.modal_body}>
+        <div className={s.modal_body_header}>
+          <span className={s.modal_body_heading}>Увійти в кабінет</span>
+          <span className={s.modal_body_subheading}>
             Увійдіть, щоб мати можливість додавати книги у обране та писати
             відгуки до прочитаних книг
           </span>
-          </div>
-          <div className={s.modal_body_quick_auth}>
-            <div className={s.modal_body_quick_auth}>
-              <img
-                  src={GoogleAuthIcon}
-                  alt="google auth"
-                  className="google_auth"
-                  onClick={handleGoogleAuth} // Add event handler for clicking Google icon
-              />
-            </div>
-          </div>
+        </div>
+        <div className={s.modal_body_quick_auth}>
+          <img src={GoogleAuthIcon} alt="google auth" className="google_auth" />
+        </div>
         <form onSubmit={handleLogin} className={s.modal_body_form}>
           <input
             type="email"

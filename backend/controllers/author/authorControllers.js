@@ -6,10 +6,10 @@ const getAllAuthors = async (req, res) => {
   const query = new Parse.Query(Authors);
   try {
     const results = await query.find();
-    const authors = results.map(author => ({
+    const authors = results.map((author) => ({
       id: author.id,
       full_name: author.get("full_name"),
-      cover_image: author.get("cover_image")
+      cover_image: author.get("cover_image"),
     }));
     res.json(authors);
   } catch (err) {
@@ -17,10 +17,11 @@ const getAllAuthors = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
 const getAuthorById = async (authorId) => {
-  const Authors = Parse.Object.extend("authors");
-  const query = new Parse.Query(Authors);
-  query.equalTo("objectId", authorId);
+  const authors = Parse.Object.extend("authors");
+  const query = new Parse.Query(authors).equalTo("objectId", authorId);
+
   try {
     const author = await query.first();
     return author.toJSON();
@@ -30,8 +31,7 @@ const getAuthorById = async (authorId) => {
   }
 };
 
-
 module.exports = {
   getAllAuthors,
-  getAuthorById
+  getAuthorById,
 };

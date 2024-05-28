@@ -59,11 +59,21 @@ body {
 }
 
 .book_actions {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   margin-top: 60px;
   flex-grow: 1;
+}
+
+.book_add_to_favorites {
+  position: absolute;
+  top: -35px;
+  right: 0px;
+  background: transparent;
+  border: none;
+  width: 24px;
 }
 
 .book_price {
@@ -80,7 +90,8 @@ body {
 }
 
 .read_online,
-.buy {
+.buy,
+.show_cart {
   min-width: 140px;
   min-height: 34px;
   border-radius: 15px;
@@ -93,7 +104,8 @@ body {
   background: transparent;
 }
 
-.buy {
+.buy,
+.show_cart {
   background: #fff;
   color: #2e2e2e;
   font-weight: 500;
