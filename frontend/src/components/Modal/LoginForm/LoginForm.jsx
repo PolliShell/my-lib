@@ -1,9 +1,9 @@
 import s from "../Modal.module.css";
 import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
-import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { setLSItem } from "../../../helpers/LSHelpers";
+import { axiosInstance } from "../../../axios/axiosInstance";
 
 export const LoginForm = ({ setModalType }) => {
   const [formData, setFormData] = useState({
@@ -24,35 +24,19 @@ export const LoginForm = ({ setModalType }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-          "http://localhost:3000/auth/login",
-          formData
-      );
+      const res = await axiosInstance.post("/auth/login", formData);
 
-      if (!res.data.loggedIn) {
+      if (!res.loggedIn) {
         setOpenErrorModal(true);
-        setErrorMsg(res.data.message);
+        setErrorMsg(res.message);
         return;
       }
 
-      setLSItem("userToken", res.data.accessToken);
+      setLSItem("userToken", res.accessToken);
       window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);
       setErrorMsg("Login failed. Please check your credentials.");
-    }
-  };
-
-  const handleGoogleAuth = async () => {
-    try {
-      // Make a request to your server's Google authentication endpoint
-      const res = await axios.get("http://localhost:3000/auth/google");
-
-      // Redirect to the URL received from the server
-      window.location.href = res.data.url;
-    } catch (error) {
-      setOpenErrorModal(true);
-      setErrorMsg("Google authentication failed.");
     }
   };
 
@@ -67,12 +51,7 @@ export const LoginForm = ({ setModalType }) => {
           </span>
           </div>
           <div className={s.modal_body_quick_auth}>
-            <img
-                src={GoogleAuthIcon}
-                alt="google auth"
-                className="google_auth"
-                onClick={handleGoogleAuth} // Call handleGoogleAuth when the Google button is clicked
-            />
+            <img src={GoogleAuthIcon} alt="google auth" className="google_auth" />
           </div>
           <form onSubmit={handleLogin} className={s.modal_body_form}>
             <input

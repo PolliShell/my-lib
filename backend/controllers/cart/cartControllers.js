@@ -36,8 +36,8 @@ const deleteCartBookById = async (req, res) => {
   try {
     const Cart = Parse.Object.extend("cart_books");
     const query = new Parse.Query(Cart)
-      .equalTo("userId", userId)
-      .equalTo("bookId", bookId);
+        .equalTo("userId", userId)
+        .equalTo("bookId", bookId);
     const cartItem = await query.first();
 
     if (!cartItem) {
