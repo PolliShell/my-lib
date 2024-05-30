@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.get("email") },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "1d" }
   );
@@ -13,7 +13,7 @@ const generateAccessToken = (user) => {
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.get("email") },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "7d" }
   );
@@ -30,16 +30,11 @@ const signup = async (req, res) => {
     newUser.set("email", email);
     newUser.set("password", password);
 
-    // Generate tokens
-    const accessToken = generateAccessToken(newUser);
-    const refreshToken = generateRefreshToken(newUser);
-
-    // Set tokens to user object
-    newUser.set("accessToken", accessToken);
-    newUser.set("refreshToken", refreshToken);
-
     // Save user
     const savedUser = await newUser.signUp();
+
+    // Generate token
+    const accessToken = generateAccessToken(savedUser);
 
     // Set token to Headers
     res.set("Authorization", `Bearer ${accessToken}`);
@@ -74,8 +69,6 @@ const login = async (req, res) => {
 
     // Generate tokens
     const accessToken = generateAccessToken(loggedInUser);
-    // TODO: need to update user refresh token in DB
-    // const refreshToken = generateRefreshToken(loggedInUser);
 
     // Set token to Headers
     res.set("Authorization", `Bearer ${accessToken}`);
@@ -95,6 +88,7 @@ const login = async (req, res) => {
 
 const me = async (req, res) => {
   try {
+    console.log(req.user);
     const query = new Parse.Query(Parse.User);
     const user = await query.select("username").get(req.user?.id);
 

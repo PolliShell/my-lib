@@ -25,19 +25,19 @@ export const Homepage = () => {
       <Navbar />
       <main className={`${s.main} container`}>
         <section>
-          <h2>Популярні книги</h2>
+          <h2>Книги</h2>
           <div className={s.books}>
-            {books.map((book) => (
+            {books?.map((book) => (
               <BookPreview key={book.objectId} book={book} />
             ))}
           </div>
         </section>
-        <section>
+        {/* <section>
           <h2>Акційні книги</h2>
           <div className={s.books}>
-            {/* Render discounted books similarly */}
+            Render discounted books similarly
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );
