@@ -2,6 +2,7 @@
 const bcrypt = require("bcrypt");
 const { Parse } = require("parse/node");
 const jwt = require("jsonwebtoken");
+const nodemailer = require('nodemailer');
 
 const generateAccessToken = (user) => {
   return jwt.sign(
@@ -18,6 +19,30 @@ const generateRefreshToken = (user) => {
     { expiresIn: "7d" }
   );
 };
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: process.env.SMTP_EMAIL,
+    pass: process.env.SMTP_PASSWORD
+  }
+});
+
+const sendMail = async (to, subject, text) => {
+  const mailOptions = {
+    from: process.env.SMTP_EMAIL,
+    to: to,
+    subject: subject,
+    text: text
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
 
 // Function to register a new user
 const signup = async (req, res) => {
@@ -32,6 +57,9 @@ const signup = async (req, res) => {
 
     // Save user
     const savedUser = await newUser.signUp();
+
+    // Send welcome email
+    await sendMail(email, 'Welcome!', 'Thank you for registering at our service.');
 
     // Generate token
     const accessToken = generateAccessToken(savedUser);
@@ -49,6 +77,7 @@ const signup = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -104,19 +133,20 @@ const me = async (req, res) => {
 };
 
 const authenticate = async (req, res, next) => {
-  const token = req.header("Authorization");
+  const token = req.header("Authorization")?.split(" ")[1]; // Extract token from "Bearer <token>"
   if (!token) {
     return res.status(401).send("Access denied. No token provided.");
   }
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.user = decoded;
+    req.user = decoded; // Set the user in request
     next();
   } catch (e) {
     console.log(e);
-    res.status(401).send(e.message);
+    res.status(401).send("Invalid token.");
   }
 };
+
 
 module.exports = { signup, login, me, authenticate };

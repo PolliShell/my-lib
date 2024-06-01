@@ -10,6 +10,6 @@ router.delete(
   authenticate,
   cartController.deleteCartBookById
 );
-// router.post("/purchase", authenticate, cartController.purchaseBooks);
+router.post("/purchase", authenticate, cartController.purchaseBooks);
 
 module.exports = router;
