@@ -6,19 +6,20 @@ const nodemailer = require('nodemailer');
 
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { id: user.id, email: user.get("email") },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "1d" }
+      { id: user.id, email: user.get("email") },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" }
   );
 };
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
-    { id: user.id, email: user.get("email") },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "7d" }
+      { id: user.id, email: user.get("email") },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
   );
 };
+
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -58,7 +59,6 @@ const signup = async (req, res) => {
     // Save user
     const savedUser = await newUser.signUp();
 
-    // Send welcome email
     await sendMail(email, 'Welcome!', 'Thank you for registering at our service.');
 
     // Generate token
@@ -78,7 +78,6 @@ const signup = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -89,8 +88,8 @@ const login = async (req, res) => {
 
     if (!user) {
       return res
-        .status(401)
-        .json({ loggedIn: false, message: "Invalid email or password" });
+          .status(401)
+          .json({ loggedIn: false, message: "Invalid email or password" });
     }
 
     // Authenticate user
@@ -110,8 +109,8 @@ const login = async (req, res) => {
   } catch (error) {
     console.error("Login error: ", error);
     res
-      .status(401)
-      .json({ loggedIn: false, message: "Invalid email or password" });
+        .status(401)
+        .json({ loggedIn: false, message: "Invalid email or password" });
   }
 };
 
@@ -133,20 +132,19 @@ const me = async (req, res) => {
 };
 
 const authenticate = async (req, res, next) => {
-  const token = req.header("Authorization")?.split(" ")[1]; // Extract token from "Bearer <token>"
+  const token = req.header("Authorization");
   if (!token) {
     return res.status(401).send("Access denied. No token provided.");
   }
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.user = decoded; // Set the user in request
+    req.user = decoded;
     next();
   } catch (e) {
     console.log(e);
-    res.status(401).send("Invalid token.");
+    res.status(401).send(e.message);
   }
 };
-
 
 module.exports = { signup, login, me, authenticate };
