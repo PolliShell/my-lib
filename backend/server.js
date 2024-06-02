@@ -3,9 +3,8 @@ const cors = require("cors");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("passport");
-require("dotenv").config();
 
-// Configure passport setup
+require("dotenv").config();
 require("./config/passportSutup");
 
 const bookRoutes = require("./routes/bookRoutes");
@@ -15,6 +14,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const favoritesRoutes = require("./routes/favoritesRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 const googleRoutes = require("./controllers/auth/google_email/index");
 
 const app = express();
@@ -41,7 +41,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Define routes
 app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
 app.use("/auth", authRoutes);
@@ -50,8 +49,9 @@ app.use("/genre", genreRoutes);
 app.use("/user", userRoutes);
 app.use("/cart", cartRoutes);
 app.use("/favorites", favoritesRoutes);
+app.use("/payment", paymentRoutes);
 
-// Start the server
+
 const PORT = process.env.APP_PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

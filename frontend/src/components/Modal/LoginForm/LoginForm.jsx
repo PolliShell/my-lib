@@ -40,6 +40,10 @@ export const LoginForm = ({ setModalType }) => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:3000/auth/google";
+  };
+
   return (
       <>
         <div className={s.modal_body}>
@@ -51,7 +55,12 @@ export const LoginForm = ({ setModalType }) => {
           </span>
           </div>
           <div className={s.modal_body_quick_auth}>
-            <img src={GoogleAuthIcon} alt="google auth" className="google_auth" />
+            <img
+                src={GoogleAuthIcon}
+                alt="google auth"
+                className="google_auth"
+                onClick={handleGoogleLogin}
+            />
           </div>
           <form onSubmit={handleLogin} className={s.modal_body_form}>
             <input
