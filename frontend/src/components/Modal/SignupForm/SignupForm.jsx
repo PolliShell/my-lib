@@ -34,6 +34,7 @@ export const SignupForm = ({ setModalType }) => {
       }
 
       setLSItem("userToken", res.accessToken);
+      setLSItem("cartBooks", []);
       window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);

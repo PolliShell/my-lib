@@ -4,8 +4,10 @@ import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { setLSItem } from "../../../helpers/LSHelpers";
 import { axiosInstance } from "../../../axios/axiosInstance";
+import { useNavigate } from "react-router";
 
 export const LoginForm = ({ setModalType }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,6 +35,7 @@ export const LoginForm = ({ setModalType }) => {
       }
 
       setLSItem("userToken", res.accessToken);
+      setLSItem("cartBooks", []);
       window.location.reload();
     } catch (error) {
       setOpenErrorModal(true);
@@ -40,64 +43,83 @@ export const LoginForm = ({ setModalType }) => {
     }
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     window.location.href = "http://localhost:3000/auth/google";
+    // try {
+    //   await axiosInstance.get("/auth/google");
+    // const res = await axiosInstance.get("/auth/google/success");
+
+    // console.log(res);
+
+    // if (!res.loggedIn) {
+    //   setOpenErrorModal(true);
+    //   setErrorMsg(res.message);
+    //   return;
+    // }
+
+    // setLSItem("userToken", res.accessToken);
+    // setLSItem("cartBooks", []);
+    // window.location.href = "/";
+    // } catch (e) {
+    //   setOpenErrorModal(true);
+    //   setErrorMsg(e.message);
+    // }
   };
 
   return (
-      <>
-        <div className={s.modal_body}>
-          <div className={s.modal_body_header}>
-            <span className={s.modal_body_heading}>Увійти в кабінет</span>
-            <span className={s.modal_body_subheading}>
+    <>
+      <div className={s.modal_body}>
+        <div className={s.modal_body_header}>
+          <span className={s.modal_body_heading}>Увійти в кабінет</span>
+          <span className={s.modal_body_subheading}>
             Увійдіть, щоб мати можливість додавати книги у обране та писати
             відгуки до прочитаних книг
           </span>
-          </div>
-          <div className={s.modal_body_quick_auth}>
-            <img
-                src={GoogleAuthIcon}
-                alt="google auth"
-                className="google_auth"
-                onClick={handleGoogleLogin}
-            />
-          </div>
-          <form onSubmit={handleLogin} className={s.modal_body_form}>
-            <input
-                type="email"
-                placeholder="Пошта"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-            />
-            <input
-                type="password"
-                placeholder="Пароль"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-            />
-            <button type="submit" className={s.submitButton}>
-              Увійти
-            </button>
-          </form>
-          <div className={s.modal_body_register}>
-            <span className={s.modal_body_register_desc}>Немає профілю?</span>
-            <span
-                className={s.modal_body_register_link}
-                onClick={() => setModalType("signup")}
-            >
+        </div>
+        <div className={s.modal_body_quick_auth}>
+          <img
+            src={GoogleAuthIcon}
+            alt="google auth"
+            className="google_auth"
+            onClick={handleGoogleLogin}
+          />
+        </div>
+        <form onSubmit={handleLogin} className={s.modal_body_form}>
+          <input
+            type="email"
+            placeholder="Пошта"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Пароль"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" className={s.submitButton}>
+            Увійти
+          </button>
+        </form>
+        <div className={s.modal_body_register}>
+          <span className={s.modal_body_register_desc}>Немає профілю?</span>
+          <span
+            className={s.modal_body_register_link}
+            onClick={() => setModalType("signup")}
+          >
             Зареєструйтесь
           </span>
-          </div>
-          {openErrorModal ? (
-              <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
-          ) : (
-              ""
-          )}
         </div>
-      </>
+        {openErrorModal ? (
+          <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
+        ) : (
+          ""
+        )}
+      </div>
+    </>
   );
 };

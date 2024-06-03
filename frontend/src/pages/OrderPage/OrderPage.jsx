@@ -10,39 +10,42 @@ import { axiosInstance } from "../../axios/axiosInstance";
 
 export const OrderPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useContext(AuthContext);
   const [cartBooks, setCartBooks] = useState([]);
   const [totalPrice, setTotalPrice] = useState(null);
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchCartBooks = async () => {
-      // FIX: isAuthenticated === false
-      // FIX: delete cart item
-      // console.log(isAuthenticated);
-      if (isAuthenticated) {
-        try {
-          const res = await axiosInstance.get("/cart");
-          setCartBooks(res);
-        } catch (error) {
-          console.error("Failed to fetch cart books:", error);
-        }
-      } else {
-        setCartBooks(getLSItem("cartBooks"));
+      try {
+        const res = await axiosInstance.get("/cart");
+        setCartBooks(res);
+      } catch (err) {
+        console.error("Failed to fetch cart books:", err.message);
       }
+      // if (isAuthenticated) {
+      //   try {
+      //     const res = await axiosInstance.get("/cart");
+      //     setCartBooks(res);
+      //   } catch (err) {
+      //     console.error("Failed to fetch cart books:", err.message);
+      //   }
+      // } else {
+      //   setCartBooks(getLSItem("cartBooks"));
+      // }
     };
     fetchCartBooks();
   }, []);
 
   useEffect(() => {
     const res = cartBooks
-      .map((b) => b.price)
+      ?.map((b) => b.price)
       .reduce((acc, next) => acc + next, 0);
 
     setTotalPrice(res);
   }, [cartBooks]);
 
   const handleOrder = async () => {
-    // await axiosInstance.post("/cart/purchase", { user, books: cartBooks });
+    await axiosInstance.post("/cart/purchase");
   };
 
   return (
@@ -51,7 +54,7 @@ export const OrderPage = () => {
         <button onClick={() => navigate("/")}>{"<"}</button>
         <span>Оформлення замовлення</span>
       </div>
-      {cartBooks.length ? (
+      {cartBooks?.length ? (
         <div className={s.order_container}>
           <form className={`${s.form}`}>
             <div className={s.form_left}>
@@ -67,6 +70,7 @@ export const OrderPage = () => {
                       book={book}
                       totalPrice={totalPrice}
                       setTotalPrice={setTotalPrice}
+                      cartBooks={cartBooks}
                       setCartBooks={setCartBooks}
                     />
                   ))}

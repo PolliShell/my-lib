@@ -2,30 +2,27 @@
 const bcrypt = require("bcrypt");
 const { Parse } = require("parse/node");
 const jwt = require("jsonwebtoken");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 const generateAccessToken = (user) => {
-  return jwt.sign(
-      { id: user.id, email: user.get("email") },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1d" }
-  );
+  const email = user.get("email") ?? null;
+  return jwt.sign({ id: user.id, email }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1d",
+  });
 };
 
 const generateRefreshToken = (user) => {
-  return jwt.sign(
-      { id: user.id, email: user.get("email") },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
-  );
+  return jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
 };
 
 const transporter = nodemailer.createTransport({
-  service: 'Gmail',
+  service: "Gmail",
   auth: {
     user: process.env.SMTP_EMAIL,
-    pass: process.env.SMTP_PASSWORD
-  }
+    pass: process.env.SMTP_PASSWORD,
+  },
 });
 
 const sendMail = async (to, subject, text) => {
@@ -33,17 +30,16 @@ const sendMail = async (to, subject, text) => {
     from: process.env.SMTP_EMAIL,
     to: to,
     subject: subject,
-    text: text
+    text: text,
   };
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ' + info.response);
+    console.log("Email sent: " + info.response);
   } catch (error) {
-    console.log('Error: ', error);
+    console.log("Error: ", error);
   }
 };
-
 
 // Function to register a new user
 const signup = async (req, res) => {
@@ -59,7 +55,11 @@ const signup = async (req, res) => {
     // Save user
     const savedUser = await newUser.signUp();
 
-    await sendMail(email, 'Welcome!', 'Thank you for registering at our service.');
+    await sendMail(
+      email,
+      "Welcome!",
+      "Thank you for registering at our service."
+    );
 
     // Generate token
     const accessToken = generateAccessToken(savedUser);
@@ -88,8 +88,8 @@ const login = async (req, res) => {
 
     if (!user) {
       return res
-          .status(401)
-          .json({ loggedIn: false, message: "Invalid email or password" });
+        .status(401)
+        .json({ loggedIn: false, message: "Invalid email or password" });
     }
 
     // Authenticate user
@@ -109,14 +109,13 @@ const login = async (req, res) => {
   } catch (error) {
     console.error("Login error: ", error);
     res
-        .status(401)
-        .json({ loggedIn: false, message: "Invalid email or password" });
+      .status(401)
+      .json({ loggedIn: false, message: "Invalid email or password" });
   }
 };
 
 const me = async (req, res) => {
   try {
-    console.log(req.user);
     const query = new Parse.Query(Parse.User);
     const user = await query.select("username").get(req.user?.id);
 
@@ -140,6 +139,14 @@ const authenticate = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.user = decoded;
+
+    if (!req.user.id) {
+      return res.status(400).send("User id was not provided in token");
+    }
+    // if (!req.user.email) {
+    //   return res.status(400).send("User email was not provided in token");
+    // }
+
     next();
   } catch (e) {
     console.log(e);
@@ -147,4 +154,4 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, me, authenticate };
+module.exports = { signup, login, me, authenticate, generateAccessToken };
