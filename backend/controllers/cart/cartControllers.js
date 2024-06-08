@@ -181,9 +181,38 @@ const sendPurchaseConfirmationEmail = async (userEmail, books) => {
   }
 };
 
+const getPurchasedBooksByUser = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const CartBooks = Parse.Object.extend("cart_books");
+    const query = new Parse.Query(CartBooks)
+        .equalTo("userId", userId)
+        .equalTo("isBought", true);
+
+    const purchasedCartBooks = await query.find();
+
+    if (!purchasedCartBooks.length) {
+      return res.status(404).send("No purchased books found");
+    }
+
+    const bookIds = purchasedCartBooks.map((b) => b.get("bookId"));
+
+    const Books = Parse.Object.extend("books");
+    const query2 = new Parse.Query(Books).containedIn("objectId", bookIds);
+    const purchasedBooks = await query2.find();
+
+    res.status(200).json(purchasedBooks.map((book) => book.toJSON()));
+  } catch (err) {
+    console.error("Failed to retrieve purchased books:", err.message);
+    res.status(500).send({ error: err.message });
+  }
+};
+
 module.exports = {
   getCartByUser,
   addCartBookByUser,
   deleteCartBookById,
   purchaseBooks,
+  getPurchasedBooksByUser
 };
