@@ -102,9 +102,33 @@ const addBook = async (req, res) => {
   }
 };
 
+const searchBookByTitle = async (req, res) => {
+  const title = req.body.title;
+
+  try {
+    const Books = Parse.Object.extend("books");
+    const query = new Parse.Query(Books);
+    query.contains("title", title);
+
+    const books = await query.find();
+
+    if (!books.length) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+
+    const bookData = books.map(book => book.toJSON());
+
+    res.status(200).json(bookData);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   getBooksByAuthorId,
   addBook,
+  searchBookByTitle
 };

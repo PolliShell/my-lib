@@ -9,5 +9,7 @@ router.get("/by-author/:author_id", bookController.getBooksByAuthorId);
 
 // Use the upload middleware in the add-book route
 router.post("/add-book", upload.single("coverImage"), bookController.addBook);
+router.post("/search", bookController.searchBookByTitle);
+
 
 module.exports = router;
