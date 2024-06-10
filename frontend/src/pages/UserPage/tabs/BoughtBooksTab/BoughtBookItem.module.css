@@ -1,0 +1,52 @@
+.book_item {
+  border-bottom: 1px solid #cecece;
+  padding: 20px 15px;
+  display: flex;
+}
+
+.book_item:last-child {
+  border: none;
+}
+
+.book_item > img {
+  cursor: pointer;
+  object-fit: cover;
+  width: 90px;
+  height: 90px;
+  border-radius: 15px;
+}
+
+.book_item_info {
+  flex-grow: 2;
+  padding: 8px;
+}
+
+.book_item_title {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.book_item_price {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.book_item_actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+.book_item_read {
+  min-width: 140px;
+  min-height: 34px;
+  border-radius: 10px;
+  border: 1px solid #cecece;
+  font-size: 14px;
+  background: transparent;
+}

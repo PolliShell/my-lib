@@ -1,9 +1,9 @@
 import { setLSItem } from "../../../helpers/LSHelpers";
+import { useHelperFuncs } from "../../../providers/HelperProvider";
 import s from "./UserModal.module.css";
 
 export const UserModal = () => {
-  // TODO
-  const goToUserProfilePage = () => {};
+  const { navigateTo } = useHelperFuncs();
 
   const logout = () => {
     setLSItem("userToken", null);
@@ -14,7 +14,7 @@ export const UserModal = () => {
     <>
       <div className={s.user_modal}>
         <div className={s.user_modal_actions}>
-          <span onClick={() => goToUserProfilePage}>Налаштування</span>
+          <span onClick={() => navigateTo("/profile")}>Налаштування</span>
           <span onClick={() => logout()}>Вийти</span>
         </div>
       </div>

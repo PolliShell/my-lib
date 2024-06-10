@@ -46,6 +46,10 @@ class AxiosInstance {
     return this.instance.post(url, data, config);
   }
 
+  put(url, data, config) {
+    return this.instance.put(url, data, config);
+  }
+
   delete(url, data, config) {
     return this.instance.delete(url, data, config);
   }

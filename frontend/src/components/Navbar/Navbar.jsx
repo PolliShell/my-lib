@@ -6,36 +6,23 @@ import accountIcon from "../../public/Navbar/account.png";
 import categoriesIcon from "../../public/Navbar/categories.png";
 import searchIcon from "../../public/Navbar/search.png";
 import { Modal } from "../Modal/Modal";
-import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../auth/AuthProvider";
+import { useState } from "react";
+import { useAuth } from "../../providers/AuthProvider";
 import { UserModal } from "../Modal/UserModal/UserModal";
-import { getLSItem } from "../../helpers/LSHelpers";
+import { useStateValue } from "../../providers/StateProvider";
+import { useHelperFuncs } from "../../providers/HelperProvider";
 
 export const Navbar = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useAuth();
   const [isUserModalOpen, setUserModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(null);
-  const [booksCount, setBooksCount] = useState(0);
+  const { cart, isModalOpen } = useStateValue();
+  const { openModal } = useHelperFuncs();
 
-  useEffect(() => {
-    const count = getLSItem("cartBooks")?.length;
-    setBooksCount(count);
-  }, [booksCount]);
-
-  const openModal = (modalType) => {
-    if (modalType === "cart") {
-      setModalType("cart");
-      setIsModalOpen(true);
-      return;
+  const renderCartCounter = () => {
+    if (cart.length) {
+      return <div className={s.nav_link_cart_counter}>{cart.length}</div>;
     }
-
-    if (isAuthenticated) {
-      setModalType(modalType);
-    } else {
-      setModalType("login");
-    }
-    setIsModalOpen(true);
+    return "";
   };
 
   return (
@@ -63,12 +50,7 @@ export const Navbar = () => {
             </div>
             <div className={s.nav_links}>
               <button className={s.nav_link} onClick={() => openModal("cart")}>
-                {/* TO FIX LATER */}
-                {booksCount ? (
-                  <div className={s.nav_link_cart_counter}>{booksCount}</div>
-                ) : (
-                  ""
-                )}
+                {renderCartCounter()}
                 <img src={cartIcon} alt="cart" />
                 <span>Кошик</span>
               </button>
@@ -100,9 +82,7 @@ export const Navbar = () => {
             </div>
           </div>
         </div>
-        {isModalOpen && (
-          <Modal setIsModalOpen={setIsModalOpen} type={modalType} />
-        )}
+        {isModalOpen && <Modal />}
       </nav>
     </>
   );

@@ -1,19 +1,14 @@
 import s from "../Modal.module.css";
 import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
 import { useState } from "react";
-import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { setLSItem } from "../../../helpers/LSHelpers";
 import { axiosInstance } from "../../../axios/axiosInstance";
-import { useNavigate } from "react-router";
 
 export const LoginForm = ({ setModalType }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openErrorModal, setOpenErrorModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,45 +20,15 @@ export const LoginForm = ({ setModalType }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axiosInstance.post("/auth/login", formData);
+    const res = await axiosInstance.post("/auth/login", formData);
 
-      if (!res.loggedIn) {
-        setOpenErrorModal(true);
-        setErrorMsg(res.message);
-        return;
-      }
-
-      setLSItem("userToken", res.accessToken);
-      setLSItem("cartBooks", []);
-      window.location.reload();
-    } catch (error) {
-      setOpenErrorModal(true);
-      setErrorMsg("Login failed. Please check your credentials.");
-    }
+    setLSItem("userToken", res.accessToken);
+    setLSItem("cartBooks", []);
+    window.location.reload();
   };
 
   const handleGoogleLogin = async () => {
     window.location.href = "http://localhost:3000/auth/google";
-    // try {
-    //   await axiosInstance.get("/auth/google");
-    // const res = await axiosInstance.get("/auth/google/success");
-
-    // console.log(res);
-
-    // if (!res.loggedIn) {
-    //   setOpenErrorModal(true);
-    //   setErrorMsg(res.message);
-    //   return;
-    // }
-
-    // setLSItem("userToken", res.accessToken);
-    // setLSItem("cartBooks", []);
-    // window.location.href = "/";
-    // } catch (e) {
-    //   setOpenErrorModal(true);
-    //   setErrorMsg(e.message);
-    // }
   };
 
   return (
@@ -114,11 +79,6 @@ export const LoginForm = ({ setModalType }) => {
             Зареєструйтесь
           </span>
         </div>
-        {openErrorModal ? (
-          <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
-        ) : (
-          ""
-        )}
       </div>
     </>
   );

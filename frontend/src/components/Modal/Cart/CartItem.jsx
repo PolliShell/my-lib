@@ -1,19 +1,16 @@
 import s from "./Cart.module.css";
-import { useContext, useState } from "react";
-import { toBookPage } from "../../../helpers/toBookPage";
+import { useState } from "react";
 import { getLSItem, removeLSItem } from "../../../helpers/LSHelpers";
 import RemoveItemImg from "../../../public/Navbar/Modal/bin icon.png";
-import { AuthContext } from "../../../auth/AuthProvider";
+import { useAuth } from "../../../providers/AuthProvider";
 import { axiosInstance } from "../../../axios/axiosInstance";
+import { useStateValue } from "../../../providers/StateProvider";
+import { useHelperFuncs } from "../../../providers/HelperProvider";
 
-export const CartItem = ({
-  book,
-  totalPrice,
-  setTotalPrice,
-  cartBooks,
-  setCartBooks,
-}) => {
-  const { isAuthenticated } = useContext(AuthContext);
+export const CartItem = ({ book }) => {
+  const { isAuthenticated } = useAuth();
+  const { cart, setCart, totalPrice, setTotalPrice } = useStateValue();
+  const { navigateTo } = useHelperFuncs();
   const [count, setCount] = useState(1);
   const [price, setPrice] = useState(book.price);
 
@@ -32,18 +29,14 @@ export const CartItem = ({
 
   const removeItem = async (id) => {
     if (isAuthenticated) {
-      try {
-        const res = await axiosInstance.delete(`/cart/delete/${id}`);
-        if (res.status) {
-          const filteredBooks = cartBooks.filter((b) => b.objectId !== id);
-          setCartBooks(filteredBooks);
-        }
-      } catch (e) {
-        console.log("Failed deleting item");
+      const res = await axiosInstance.delete(`/cart/delete/${id}`);
+      if (res.status) {
+        const filteredBooks = cart.filter((b) => b.objectId !== id);
+        setCart(filteredBooks);
       }
     } else {
       removeLSItem("cartBooks", "objectId", id);
-      setCartBooks(getLSItem("cartBooks"));
+      setCart(getLSItem("cartBooks"));
     }
   };
 
@@ -53,12 +46,12 @@ export const CartItem = ({
         <img
           src={book.cover_image}
           alt="book cover img"
-          onClick={() => toBookPage(book.objectId)}
+          onClick={() => navigateTo(`/books/${book.objectId}`)}
         />
         <div className={s.cart_item_info}>
           <div
             className={s.cart_item_title}
-            onClick={() => toBookPage(book.objectId)}
+            onClick={() => navigateTo(`/books/${book.objectId}`)}
           >
             {book.title}
           </div>

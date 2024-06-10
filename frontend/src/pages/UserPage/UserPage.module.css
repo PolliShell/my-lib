@@ -1,0 +1,88 @@
+.user,
+.user_inner {
+  padding: 0 15px;
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 10px;
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  min-width: 550px;
+  margin: 35px auto;
+  padding-top: 5px;
+  padding-bottom: 40px;
+}
+
+.user_tabs {
+  display: flex;
+  border-bottom: 1px solid #e6e8ee;
+  width: 100%;
+}
+
+.user_tab {
+  cursor: pointer;
+  padding: 12px 15px;
+  text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid #e6e8ee;
+}
+
+.user_tab:last-child {
+  border-right: none;
+}
+
+.user_tab:hover {
+  background: #e6e8ee;
+}
+
+.user_info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 50px;
+  padding-top: 20px;
+}
+
+.user_info_inputs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+}
+
+.user_info_inputs div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user_info_inputs label {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 100px;
+}
+
+.user_info_inputs input {
+  width: 220px;
+  border: 1px solid #e6e8ee;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 5px 8px;
+}
+
+.user_info button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  padding: 5px 0;
+  border: none;
+  border-radius: 5px;
+  background: #3d58b3;
+  color: #fff;
+  font-size: 15px;
+}

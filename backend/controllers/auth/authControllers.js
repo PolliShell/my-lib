@@ -117,7 +117,7 @@ const login = async (req, res) => {
 const me = async (req, res) => {
   try {
     const query = new Parse.Query(Parse.User);
-    const user = await query.select("username").get(req.user?.id);
+    const user = await query.get(req.user?.id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

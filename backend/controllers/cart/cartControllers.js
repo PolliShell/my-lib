@@ -7,11 +7,13 @@ const getCartByUser = async (req, res) => {
 
   try {
     const CartBooks = Parse.Object.extend("cart_books");
-    const query = new Parse.Query(CartBooks).equalTo("userId", userId);
+    const query = new Parse.Query(CartBooks)
+      .equalTo("userId", userId)
+      .equalTo("isBought", false);
     const cartBooks = await query.find();
 
     if (!cartBooks.length) {
-      return res.status(404).send("Cart books not found");
+      return res.status(200).json([]);
     }
 
     const bookIds = cartBooks.map((b) => b.get("bookId"));
@@ -39,7 +41,8 @@ const deleteCartBookById = async (req, res) => {
     const Cart = Parse.Object.extend("cart_books");
     const query = new Parse.Query(Cart)
       .equalTo("userId", userId)
-      .equalTo("bookId", bookId);
+      .equalTo("bookId", bookId)
+      .equalTo("isBought", false);
     const cartItem = await query.first();
 
     if (!cartItem) {
@@ -148,6 +151,7 @@ const getUserById = async (userId) => {
     throw error;
   }
 };
+
 const sendPurchaseConfirmationEmail = async (userEmail, books) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
@@ -187,13 +191,13 @@ const getPurchasedBooksByUser = async (req, res) => {
   try {
     const CartBooks = Parse.Object.extend("cart_books");
     const query = new Parse.Query(CartBooks)
-        .equalTo("userId", userId)
-        .equalTo("isBought", true);
+      .equalTo("userId", userId)
+      .equalTo("isBought", true);
 
     const purchasedCartBooks = await query.find();
 
     if (!purchasedCartBooks.length) {
-      return res.status(404).send("No purchased books found");
+      return res.status(200).json([]);
     }
 
     const bookIds = purchasedCartBooks.map((b) => b.get("bookId"));
@@ -214,5 +218,5 @@ module.exports = {
   addCartBookByUser,
   deleteCartBookById,
   purchaseBooks,
-  getPurchasedBooksByUser
+  getPurchasedBooksByUser,
 };

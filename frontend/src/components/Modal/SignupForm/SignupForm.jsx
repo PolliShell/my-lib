@@ -11,8 +11,6 @@ export const SignupForm = ({ setModalType }) => {
     email: "",
     password: "",
   });
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openErrorModal, setOpenErrorModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,18 +26,13 @@ export const SignupForm = ({ setModalType }) => {
       const res = await axiosInstance.post("/auth/signup", formData);
 
       if (!res.loggedIn) {
-        setOpenErrorModal(true);
-        setErrorMsg(res.message);
         return;
       }
 
       setLSItem("userToken", res.accessToken);
       setLSItem("cartBooks", []);
       window.location.reload();
-    } catch (error) {
-      setOpenErrorModal(true);
-      setErrorMsg("Registration failed. Please check your credentials.");
-    }
+    } catch (error) {}
   };
 
   return (
@@ -92,11 +85,6 @@ export const SignupForm = ({ setModalType }) => {
             Увійти
           </span>
         </div>
-        {openErrorModal ? (
-          <ErrorMessage msg={errorMsg} setOpenErrorModal={setOpenErrorModal} />
-        ) : (
-          ""
-        )}
       </div>
     </>
   );

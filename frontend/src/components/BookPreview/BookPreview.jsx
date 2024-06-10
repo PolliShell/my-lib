@@ -1,45 +1,28 @@
 import s from "./BookPreview.module.css";
-import { useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { Modal } from "../Modal/Modal";
 import FavoritesIcon from "../../public/Navbar/favorites.png";
-import { toBookPage } from "../../helpers/toBookPage";
-import { setLSItem, getLSItem, checkLSItem } from "../../helpers/LSHelpers";
-import { AuthContext } from "../../auth/AuthProvider";
+import { pushUniqLSItem } from "../../helpers/LSHelpers";
+import { useAuth } from "../../providers/AuthProvider";
 import { axiosInstance } from "../../axios/axiosInstance";
+import { useStateValue } from "../../providers/StateProvider";
+import { useHelperFuncs } from "../../providers/HelperProvider";
 
 export const BookPreview = ({ book }) => {
-  const { isAuthenticated } = useContext(AuthContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(null);
-
-  const openModal = (modalType) => {
-    if (modalType === "cart") {
-      setModalType("cart");
-      setIsModalOpen(true);
-      return;
-    }
-
-    if (isAuthenticated) {
-      setModalType(modalType);
-    } else {
-      setModalType("login");
-    }
-    setIsModalOpen(true);
-  };
+  const { isAuthenticated } = useAuth();
+  const { cart, setCart, isModalOpen } = useStateValue();
+  const { openModal, navigateTo } = useHelperFuncs();
 
   const addToCart = async () => {
     if (isAuthenticated) {
       await axiosInstance.post("/cart/add", { bookId: book.objectId });
+      setCart([...cart, book]);
     } else {
-      const LS_cartBooks = getLSItem("cartBooks");
-      if (!checkLSItem("cartBooks", "objectId", book.objectId)) {
-        LS_cartBooks.push(book);
-        setLSItem("cartBooks", LS_cartBooks);
-      }
+      const res = pushUniqLSItem("cartBooks", "objectId", book);
+      setCart(res);
     }
-    setModalType("cart");
-    setIsModalOpen(true);
+
+    openModal("cart");
   };
 
   const addToFavorites = async () => {
@@ -50,11 +33,7 @@ export const BookPreview = ({ book }) => {
   // TODO: add removeFromFavorites on this component
 
   const checkCartItem = (id) => {
-    if (isAuthenticated) {
-      // TODO: make request to DB if book exists there
-    }
-
-    return checkLSItem("cartBooks", "objectId", id);
+    return cart.find((b) => b.objectId === id);
   };
 
   return (
@@ -62,7 +41,10 @@ export const BookPreview = ({ book }) => {
       <div className={s.get_in_favorite_btn} onClick={addToFavorites}>
         <img src={FavoritesIcon} alt="getInFavoriteIcon" />
       </div>
-      <div className={s.book_inner} onClick={() => toBookPage(book.objectId)}>
+      <div
+        className={s.book_inner}
+        onClick={() => navigateTo(`/books/${book.objectId}`)}
+      >
         <img src={book.cover_image} alt={book.title} className={s.book_img} />
         <div className={s.book_info}>
           <span className={s.book_title}>{book.title}</span>
@@ -88,11 +70,7 @@ export const BookPreview = ({ book }) => {
           </button>
         </div>
       )}
-      {isModalOpen &&
-        ReactDOM.createPortal(
-          <Modal setIsModalOpen={setIsModalOpen} type={modalType} />,
-          document.body
-        )}
+      {isModalOpen && ReactDOM.createPortal(<Modal />, document.body)}
     </div>
   );
 };

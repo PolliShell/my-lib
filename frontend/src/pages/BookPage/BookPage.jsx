@@ -4,10 +4,10 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import BookRatingNumIcon from "../../public/BookPage/rating num icon.png";
 import OutlinedRatingIcon from "../../public/BookPage/outlined star icon.png";
 import HeartIcon from "../../public/BookPage/heart.png";
-import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
-import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
+// import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
+// import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../../auth/AuthProvider";
+import { AuthContext, useAuth } from "../../providers/AuthProvider";
 import { checkLSItem, getLSItem, setLSItem } from "../../helpers/LSHelpers";
 import { Modal } from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
@@ -16,7 +16,7 @@ import { axiosInstance } from "../../axios/axiosInstance";
 export const BookPage = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
 
@@ -214,11 +214,7 @@ export const BookPage = () => {
             )}
           </div>
         </div>
-        {isModalOpen &&
-          ReactDOM.createPortal(
-            <Modal setIsModalOpen={setIsModalOpen} type={modalType} />,
-            document.body
-          )}
+        {isModalOpen && ReactDOM.createPortal(<Modal />, document.body)}
       </main>
     </>
   );

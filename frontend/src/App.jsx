@@ -4,6 +4,8 @@ import { Homepage } from "./pages/Homepage/Homepage";
 import { BookPage } from "./pages/BookPage/BookPage";
 import { setLSItem, getLSItem } from "./helpers/LSHelpers";
 import { OrderPage } from "./pages/OrderPage/OrderPage";
+import { UserPage } from "./pages/UserPage/UserPage";
+import { ReaderPage } from "./pages/ReaderPage/ReaderPage";
 
 export const App = () => {
   // Default LS items
@@ -21,7 +23,9 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/books/:id" element={<BookPage />} />
+        <Route path="/books/:id/read" element={<ReaderPage />} />
         <Route path="/order" element={<OrderPage />} />
+        <Route path="/profile" element={<UserPage />} />
       </Routes>
     </>
   );

@@ -19,7 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -45,7 +45,7 @@
   "devDependencies": {
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
-    "pdfjs-dist": "2.7.570"
+    "pdfjs-dist": "^2.7.570"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",

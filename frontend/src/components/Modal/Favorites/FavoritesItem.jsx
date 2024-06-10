@@ -1,9 +1,11 @@
 import s from "./Favorites.module.css";
-import { toBookPage } from "../../../helpers/toBookPage";
 import RemoveItemImg from "../../../public/Navbar/Modal/bin icon.png";
 import { axiosInstance } from "../../../axios/axiosInstance";
+import { useHelperFuncs } from "../../../providers/HelperProvider";
 
 export const FavoritesItem = ({ data, favBooks, setFavBooks }) => {
+  const { navigateTo } = useHelperFuncs();
+
   const removeItem = async () => {
     try {
       const res = await axiosInstance.delete(
@@ -26,12 +28,12 @@ export const FavoritesItem = ({ data, favBooks, setFavBooks }) => {
         <img
           src={data.cover_image}
           alt="book cover img"
-          onClick={() => toBookPage(data.objectId)}
+          onClick={() => navigateTo(`/books/${data.objectId}`)}
         />
         <div className={s.fav_item_info}>
           <div
             className={s.fav_item_title}
-            onClick={() => toBookPage(data.objectId)}
+            onClick={() => navigateTo(`/books/${data.objectId}`)}
           >
             {data.title}
           </div>

@@ -1,12 +1,12 @@
 import s from "./Favorites.module.css";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../auth/AuthProvider";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../providers/AuthProvider";
 import { EmptyModal } from "../EmptyModal/EmptyModal";
 import { FavoritesItem } from "./FavoritesItem";
 import { axiosInstance } from "../../../axios/axiosInstance";
 
 export const Favorites = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuth();
   const [favBooks, setFavBooks] = useState([]);
 
   useEffect(() => {

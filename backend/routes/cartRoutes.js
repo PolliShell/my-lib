@@ -11,6 +11,10 @@ router.delete(
   cartController.deleteCartBookById
 );
 router.post("/purchase", authenticate, cartController.purchaseBooks);
-router.get("/purchased-books", authenticate,cartController.getPurchasedBooksByUser);
+router.get(
+  "/purchased-books",
+  authenticate,
+  cartController.getPurchasedBooksByUser
+);
 
 module.exports = router;

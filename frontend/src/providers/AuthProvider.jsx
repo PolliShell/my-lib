@@ -1,22 +1,16 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { axiosInstance } from "../axios/axiosInstance";
-import { setLSItem } from "../helpers/LSHelpers";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const res = await axiosInstance.get("/auth/me");
-        if (!res) {
-          setIsAuthenticated(false);
-          return;
-        }
-
         setIsAuthenticated(true);
         setUser(res);
       } catch (error) {
@@ -33,3 +27,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);
