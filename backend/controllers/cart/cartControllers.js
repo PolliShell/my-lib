@@ -58,7 +58,7 @@ const deleteCartBookById = async (req, res) => {
 };
 
 const addCartBookByUser = async (req, res) => {
-  const { bookId, count = 1, isBought = false } = req.body;
+  const { bookId } = req.body;
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ error: "UserId is required" });
@@ -68,11 +68,12 @@ const addCartBookByUser = async (req, res) => {
   }
 
   const Cart = Parse.Object.extend("cart_books");
-  const cartQuery = new Parse.Query(Cart);
+  const cartQuery = new Parse.Query(Cart)
+    .equalTo("userId", userId)
+    .equalTo("bookId", bookId)
+    .equalTo("isBought", false);
 
   try {
-    cartQuery.equalTo("userId", userId);
-    cartQuery.equalTo("bookId", bookId);
     let cartItem = await cartQuery.first();
 
     if (cartItem) {
@@ -83,8 +84,8 @@ const addCartBookByUser = async (req, res) => {
       cartItem = new Cart();
       cartItem.set("bookId", bookId);
       cartItem.set("userId", userId);
-      cartItem.set("count", count);
-      cartItem.set("isBought", isBought);
+      cartItem.set("count", 1);
+      cartItem.set("isBought", false);
     }
 
     const result = await cartItem.save();

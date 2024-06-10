@@ -2,9 +2,11 @@ import { useAuth } from "../../../providers/AuthProvider";
 import s from "../UserPage.module.css";
 import { axiosInstance } from "../../../axios/axiosInstance";
 import { useState } from "react";
+import { useHelperFuncs } from "../../../providers/HelperProvider";
 
 export const UserInfoTab = () => {
   const { user } = useAuth();
+  const { navigateTo } = useHelperFuncs();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -20,18 +22,18 @@ export const UserInfoTab = () => {
 
   const updateUserInfo = async (e) => {
     e.preventDefault();
-    const filteredFormData = Object.entries(formData).filter(
-      ([key, value]) => value !== ""
-    );
+    const filteredFormData = Object.keys(formData).reduce((acc, key) => {
+      if (formData[key] !== "") {
+        acc[key] = formData[key];
+      }
+      return acc;
+    }, {});
     try {
-      const res = await axiosInstance.put(
-        `/profile/${user.objectId}`,
+      await axiosInstance.put(
+        `/user/profile/${user.objectId}`,
         filteredFormData
       );
-      console.log(res);
-      if (res.id) {
-        console.log("success");
-      }
+      navigateTo("/");
     } catch (err) {
       console.log(err.message);
     }
