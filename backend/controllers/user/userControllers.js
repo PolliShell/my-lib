@@ -36,21 +36,31 @@ const updateUserById = async (req, res) => {
     const userId = req.params.id;
     const { username, email } = req.body;
 
+    console.log(`Received request to update user with ID: ${userId}`);
+    console.log(`Incoming update data: username = ${username}, email = ${email}`);
+
     if (!username && !email) {
       return res.status(400).json({ error: "Необходимо указать хотя бы одно поле для обновления" });
     }
 
     const query = new Parse.Query(Parse.User);
-
     const user = await query.get(userId);
 
     if (user) {
-      if (username) user.set("username", username);
-      if (email) user.set("email", email);
+      if (username) {
+        console.log(`Updating username to: ${username}`);
+        user.set("username", username);
+      }
+      if (email) {
+        console.log(`Updating email to: ${email}`);
+        user.set("email", email);
+      }
 
       await user.save(null, { useMasterKey: true });
 
       const updatedUserJSON = user.toJSON();
+
+      console.log(`User updated successfully: ${JSON.stringify(updatedUserJSON)}`);
 
       res.json({
         id: updatedUserJSON.objectId,
@@ -60,10 +70,12 @@ const updateUserById = async (req, res) => {
         updatedAt: updatedUserJSON.updatedAt
       });
     } else {
+      console.log(`User not found for ID: ${userId}`);
       res.status(404).json({ error: "Пользователь не найден" });
     }
   } catch (error) {
     console.error(`Ошибка при обновлении пользователя с ID ${req.params.id}: ${error.message}`);
+    console.error(`Полный текст ошибки: ${error}`);
     res.status(500).json({ error: "Внутренняя ошибка сервера" });
   }
 };
