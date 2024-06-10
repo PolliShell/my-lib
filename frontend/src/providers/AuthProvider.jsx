@@ -11,8 +11,11 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const res = await axiosInstance.get("/auth/me");
-        setIsAuthenticated(true);
-        setUser(res);
+
+        if (res) {
+          setIsAuthenticated(true);
+          setUser(res);
+        }
       } catch (error) {
         setIsAuthenticated(false);
       }
