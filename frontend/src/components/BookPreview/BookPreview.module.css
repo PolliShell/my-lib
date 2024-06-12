@@ -44,26 +44,45 @@
 .book_actions {
   margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  display: none; /* Скрываем кнопки действий по умолчанию */
 }
 
-.book_actions button {
+.book:hover .book_actions {
+  display: flex; /* Показываем кнопки действий при наведении */
+}
+
+.book_buy_button {
   font-size: 14px;
   padding: 6px;
   width: 100%;
   border-radius: 15px;
-}
-
-.book_show_cart {
-  border: 1px solid #cecece;
-  background: transparent;
-}
-
-.book_buy {
   border: none;
   background: #3d58b3;
   color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.book_buy_button:hover {
+  background: #2c3d93;
+}
+
+.book_in_cart_button {
+  font-size: 14px;
+  padding: 6px;
+  width: 100%;
+  border-radius: 15px;
+  border: none;
+  background: #d3d3d3; /* Бледный серый цвет */
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.book_in_cart_button:hover {
+  background: #b3b3b3; /* Темнее при наведении */
 }
 
 .book_img {

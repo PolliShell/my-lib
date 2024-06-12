@@ -5,7 +5,7 @@ const {authenticate} = require("../controllers/auth/authControllers");
 
 router.get('/user/:user_id', commentController.getCommentsByUserId);
 router.get('/book/:book_id', commentController.getCommentsByBookId);
-router.post('/', authenticate, commentController.addComment); // Use the authentication middleware
+router.post('/', authenticate, commentController.addComment);
 
 
 module.exports = router;
