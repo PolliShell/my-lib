@@ -1,7 +1,6 @@
 import s from "../Modal.module.css";
 import GoogleAuthIcon from "../../../public/Navbar/Modal/google_auth_icon.png";
 import { useState } from "react";
-import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { setLSItem } from "../../../helpers/LSHelpers";
 import { axiosInstance } from "../../../axios/axiosInstance";
 
@@ -25,7 +24,7 @@ export const SignupForm = ({ setModalType }) => {
     try {
       const res = await axiosInstance.post("/auth/signup", formData);
 
-      if (!res.loggedIn) {
+      if (!res.status) {
         return;
       }
 

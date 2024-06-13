@@ -14,8 +14,8 @@ const getAll = async (req, res) => {
     const booksWithAuthors = await Promise.all(
       books.map(async (book) => {
         const bookData = book.toJSON();
-        const author = await getAuthorById(bookData.author_id); // Функция, которая получает информацию об авторе по его ID
-        bookData.author_name = author.full_name; // Добавляем имя автора к данным о книге
+        const author = await getAuthorById(bookData.author_id);
+        bookData.author_name = author.full_name;
         return bookData;
       })
     );
@@ -50,7 +50,7 @@ const getById = async (req, res) => {
       author_name: author.full_name,
     };
 
-    res.status(200).json(combinedBook);
+    res.status(200).json({ ...combinedBook, status: true });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -103,24 +103,21 @@ const addBook = async (req, res) => {
 };
 
 const searchBookByTitle = async (req, res) => {
-  const title = req.body.title;
+  const title = req.query.title;
 
   try {
     const Books = Parse.Object.extend("books");
-    const query = new Parse.Query(Books);
-    query.contains("title", title);
-
-    const books = await query.find();
+    const books = await new Parse.Query(Books).matches("title", title).find();
 
     if (!books.length) {
-      return res.status(404).json({ error: "Book not found" });
+      return res.status(200).json([]);
     }
 
-    const bookData = books.map(book => book.toJSON());
+    const bookData = books.map((book) => book.toJSON());
 
     res.status(200).json(bookData);
-  } catch (error) {
-    console.error('Error:', error);
+  } catch (e) {
+    console.error("Error:", e);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -130,5 +127,5 @@ module.exports = {
   getById,
   getBooksByAuthorId,
   addBook,
-  searchBookByTitle
+  searchBookByTitle,
 };

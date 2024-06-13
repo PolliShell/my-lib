@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const favController = require("../controllers/favorites/favoritesControllers");
-const { authenticate } = require("../controllers/auth/authControllers");
+const favController = require("../../controllers/favorites/favoritesControllers");
+const { authenticate } = require("../../controllers/auth/authControllers");
 
 router.get("/", authenticate, favController.getFavorites);
 router.post("/add", authenticate, favController.addBookToFavorites);

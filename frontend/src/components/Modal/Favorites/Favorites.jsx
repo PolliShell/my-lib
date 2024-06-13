@@ -1,40 +1,18 @@
 import s from "./Favorites.module.css";
-import { useEffect, useState } from "react";
-import { useAuth } from "../../../providers/AuthProvider";
 import { EmptyModal } from "../EmptyModal/EmptyModal";
 import { FavoritesItem } from "./FavoritesItem";
-import { axiosInstance } from "../../../axios/axiosInstance";
+import { useStateValue } from "../../../providers/StateProvider";
 
 export const Favorites = () => {
-  const { isAuthenticated } = useAuth();
-  const [favBooks, setFavBooks] = useState([]);
-
-  useEffect(() => {
-    const fetchFavBooks = async () => {
-      if (isAuthenticated) {
-        try {
-          const res = await axiosInstance.get("/favorites");
-          setFavBooks(res);
-        } catch (error) {
-          console.error("Failed to fetch books:", error);
-        }
-      }
-    };
-    fetchFavBooks();
-  }, []);
+  const { favorites } = useStateValue();
 
   return (
     <>
-      {favBooks && favBooks.length ? (
+      {favorites.length ? (
         <div className={s.fav}>
           <div className={s.fav_items}>
-            {favBooks.map((b) => (
-              <FavoritesItem
-                key={b.objectId}
-                data={b}
-                favBooks={favBooks}
-                setFavBooks={setFavBooks}
-              />
+            {favorites.map((b) => (
+              <FavoritesItem key={b.objectId} data={b} />
             ))}
           </div>
         </div>

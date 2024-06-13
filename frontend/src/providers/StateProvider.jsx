@@ -8,19 +8,15 @@ const StateContext = createContext();
 export const StateProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
-  const [boughtItems, setBoughtItems] = useState([]);
-  const [cart, setCart] = useState(getLSItem("cartBooks"));
-  const [favorites, setFavorites] = useState(getLSItem("favBooks"));
+  const [favorites, setFavorites] = useState([]);
+  const [categories, setCategories] = useState([]);
 
+  const [cart, setCart] = useState(getLSItem("cartBooks"));
+  const [boughtItems, setBoughtItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const [modalType, setModalType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    const res = cart.map((b) => b.price).reduce((acc, next) => acc + next, 0);
-    setTotalPrice(res);
-  }, [cart]);
 
   useEffect(() => {
     const fetchCartBooks = async () => {
@@ -28,8 +24,8 @@ export const StateProvider = ({ children }) => {
         try {
           const res = await axiosInstance.get("/cart");
           setCart(res);
-        } catch (err) {
-          console.error("Failed to fetch cart books:", err.message);
+        } catch (e) {
+          console.error("Failed to fetch cart books:", e.message);
         }
       }
     };
@@ -39,19 +35,51 @@ export const StateProvider = ({ children }) => {
         try {
           const res = await axiosInstance.get("/cart/purchased-books");
           setBoughtItems(res);
-        } catch (err) {
-          console.error("Failed to fetch cart books:", err.message);
+        } catch (e) {
+          console.error("Failed to fetch bought books:", e.message);
+        }
+      }
+    };
+
+    const fetchFavBooks = async () => {
+      if (isAuthenticated) {
+        try {
+          const res = await axiosInstance.get("/favorites");
+          setFavorites(res);
+        } catch (e) {
+          console.error("Failed to fetch favorite books:", e.message);
         }
       }
     };
 
     fetchCartBooks();
     fetchBoughtBooks();
+    fetchFavBooks();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    const res = cart?.map((b) => b.price).reduce((acc, next) => acc + next, 0);
+    setTotalPrice(res);
+  }, [cart]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await axiosInstance.get("/genres");
+        setCategories(res);
+      } catch (e) {
+        console.error("Failed to fetch categories", e);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   return (
     <StateContext.Provider
       value={{
+        categories,
+        setCategories,
         boughtItems,
         setBoughtItems,
         cart,

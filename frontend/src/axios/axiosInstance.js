@@ -9,11 +9,10 @@ class AxiosInstance {
       baseURL: "http://localhost:3000",
       headers: {
         "Content-Type": "application/json",
-        Authorization: this.token, // Token
+        Authorization: this.token,
       },
     });
 
-    // Interceptors for request and response
     this.instance.interceptors.request.use(this.handleRequest);
     this.instance.interceptors.response.use(
       this.handleResponse,
@@ -21,21 +20,16 @@ class AxiosInstance {
     );
   }
 
-  // Method to handle request
   handleRequest(config) {
-    // You can modify request headers, add authentication tokens, etc. here
     return config;
   }
 
-  // Method to handle response
   handleResponse(res) {
     return res.data;
   }
 
-  // Method to handle error
   handleError(err) {
-    console.error(err.message);
-    return;
+    return { ...err, status: false };
   }
 
   get(url, config) {
@@ -53,8 +47,6 @@ class AxiosInstance {
   delete(url, data, config) {
     return this.instance.delete(url, data, config);
   }
-
-  // Add more methods as needed (PUT, DELETE, etc.)
 }
 
 export const axiosInstance = new AxiosInstance();

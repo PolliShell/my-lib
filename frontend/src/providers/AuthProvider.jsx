@@ -9,15 +9,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const res = await axiosInstance.get("/auth/me");
-
-        if (res) {
-          setIsAuthenticated(true);
-          setUser(res);
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
+      const res = await axiosInstance.get("/auth/me");
+      if (res.status) {
+        setIsAuthenticated(true);
+        setUser(res.user);
       }
     };
 

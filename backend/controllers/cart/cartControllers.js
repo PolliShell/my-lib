@@ -7,10 +7,10 @@ const getCartByUser = async (req, res) => {
 
   try {
     const CartBooks = Parse.Object.extend("cart_books");
-    const query = new Parse.Query(CartBooks)
+    const cartBooks = await new Parse.Query(CartBooks)
       .equalTo("userId", userId)
-      .equalTo("isBought", false);
-    const cartBooks = await query.find();
+      .equalTo("isBought", false)
+      .find();
 
     if (!cartBooks.length) {
       return res.status(200).json([]);
@@ -19,8 +19,9 @@ const getCartByUser = async (req, res) => {
     const bookIds = cartBooks.map((b) => b.get("bookId"));
 
     const Books = Parse.Object.extend("books");
-    const query2 = new Parse.Query(Books).containedIn("objectId", bookIds);
-    const books = await query2.find();
+    const books = await new Parse.Query(Books)
+      .containedIn("objectId", bookIds)
+      .find();
 
     res.status(200).json(books);
   } catch (err) {
@@ -60,6 +61,7 @@ const deleteCartBookById = async (req, res) => {
 const addCartBookByUser = async (req, res) => {
   const { bookId } = req.body;
   const userId = req.user.id;
+
   if (!userId) {
     return res.status(400).json({ error: "UserId is required" });
   }
@@ -67,46 +69,47 @@ const addCartBookByUser = async (req, res) => {
     return res.status(400).json({ error: "BookId is required" });
   }
 
-  const Cart = Parse.Object.extend("cart_books");
-  const cartQuery = new Parse.Query(Cart)
-    .equalTo("userId", userId)
-    .equalTo("bookId", bookId)
-    .equalTo("isBought", false);
-
   try {
-    let cartItem = await cartQuery.first();
+    const Cart = Parse.Object.extend("cart_books");
+    const isExists = await new Parse.Query(Cart)
+      .equalTo("userId", userId)
+      .equalTo("bookId", bookId)
+      .equalTo("isBought", false)
+      .first();
 
-    if (cartItem) {
-      // Update count if cart item exists
-      cartItem.increment("count", count);
-    } else {
-      // Create new cart item if it doesn't exist
-      cartItem = new Cart();
-      cartItem.set("bookId", bookId);
-      cartItem.set("userId", userId);
-      cartItem.set("count", 1);
-      cartItem.set("isBought", false);
+    if (isExists) {
+      return res
+        .status(400)
+        .json({ status: false, error: "Book is already in the cart" });
     }
 
-    const result = await cartItem.save();
+    const cartItem = await new Cart()
+      .set("bookId", bookId)
+      .set("userId", userId)
+      .set("count", 1)
+      .set("isBought", false)
+      .save();
+
     res.json({
+      status: true,
       message: "Book added to cart successfully!",
-      cart: result.toJSON(),
+      cart: cartItem.toJSON(),
     });
   } catch (err) {
     console.error("Failed to add book to cart:", err);
-    res.status(500).json({ error: "Failed to add book to cart" });
+    res.status(500).json({ error: err.message });
   }
 };
 
 const purchaseBooks = async (req, res) => {
   const userId = req.user.id;
-  const Cart = Parse.Object.extend("cart_books");
-  const query = new Parse.Query(Cart);
-  query.equalTo("userId", userId);
 
   try {
-    const cartBooks = await query.find();
+    const Cart = Parse.Object.extend("cart_books");
+    const cartBooks = await new Parse.Query(Cart)
+      .equalTo("userId", userId)
+      .find();
+
     if (!cartBooks.length) {
       return res.status(404).send("No books in cart");
     }
@@ -114,8 +117,9 @@ const purchaseBooks = async (req, res) => {
     const bookIds = cartBooks.map((b) => b.get("bookId"));
 
     const Books = Parse.Object.extend("books");
-    const query2 = new Parse.Query(Books).containedIn("objectId", bookIds);
-    const books = await query2.find();
+    const books = await new Parse.Query(Books)
+      .containedIn("objectId", bookIds)
+      .find();
 
     // update cartBooks bought status
     await Promise.all(
@@ -132,9 +136,9 @@ const purchaseBooks = async (req, res) => {
 
     await sendPurchaseConfirmationEmail(req.user.email, books);
 
-    res.json({ message: "Books purchased successfully!" });
-  } catch (err) {
-    console.error("Failed to purchase books:", err);
+    res.json({ status: true, message: "Successful purchase!" });
+  } catch (e) {
+    console.error("Failed to purchase books:", e.message);
     res.status(500).json({ error: "Failed to purchase books" });
   }
 };
@@ -161,9 +165,6 @@ const sendPurchaseConfirmationEmail = async (userEmail, books) => {
       pass: process.env.SMTP_PASSWORD,
     },
   });
-
-  console.log({ userEmail });
-  console.log({ b: books[0] });
 
   const booksList = books
     .map(

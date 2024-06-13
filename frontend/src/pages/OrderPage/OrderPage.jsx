@@ -9,7 +9,7 @@ import { useHelperFuncs } from "../../providers/HelperProvider";
 import { useState } from "react";
 
 export const OrderPage = () => {
-  const { cart, totalPrice } = useStateValue();
+  const { cart, setCart, totalPrice } = useStateValue();
   const { navigateTo } = useHelperFuncs();
   const [formData, setFormData] = useState({
     username: "",
@@ -36,8 +36,12 @@ export const OrderPage = () => {
 
   const handleOrder = async (e) => {
     e.preventDefault();
-    await axiosInstance.post("/cart/purchase");
-    navigateTo("/");
+    const res = await axiosInstance.post("/cart/purchase");
+
+    if (res.status) {
+      setCart([]);
+      navigateTo("/");
+    }
   };
 
   return (
@@ -125,7 +129,7 @@ export const OrderPage = () => {
                         name="credit_card"
                         placeholder="Номер картки"
                         value={formData.credit_card}
-                        maxLength={16}
+                        maxLength="16"
                         onChange={handleChange}
                         required
                       />

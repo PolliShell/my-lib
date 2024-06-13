@@ -64,11 +64,8 @@ const signup = async (req, res) => {
     // Generate token
     const accessToken = generateAccessToken(savedUser);
 
-    // Set token to Headers
-    res.set("Authorization", `Bearer ${accessToken}`);
-
     res.status(200).json({
-      loggedIn: true,
+      status: true,
       email: savedUser.get("email"),
       accessToken,
     });
@@ -82,35 +79,28 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const userQuery = new Parse.Query(Parse.User);
-    userQuery.equalTo("email", email);
+    const userQuery = new Parse.Query(Parse.User).equalTo("email", email);
     const user = await userQuery.first();
 
     if (!user) {
       return res
         .status(401)
-        .json({ loggedIn: false, message: "Invalid email or password" });
+        .json({ status: false, message: "Invalid email or password" });
     }
 
     // Authenticate user
-    const loggedInUser = await Parse.User.logIn(email, password);
-
+    const statusUser = await Parse.User.logIn(email, password);
     // Generate tokens
-    const accessToken = generateAccessToken(loggedInUser);
-
-    // Set token to Headers
-    res.set("Authorization", `Bearer ${accessToken}`);
+    const accessToken = generateAccessToken(statusUser);
 
     res.json({
-      loggedIn: true,
-      user: loggedInUser.toJSON(),
+      status: true,
+      user: statusUser.toJSON(),
       accessToken,
     });
-  } catch (error) {
-    console.error("Login error: ", error);
-    res
-      .status(401)
-      .json({ loggedIn: false, message: "Invalid email or password" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ status: false, message: e.message });
   }
 };
 
@@ -123,7 +113,7 @@ const me = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(user);
+    res.status(200).json({ status: true, user });
   } catch (error) {
     console.error("Error fetching user by ID:", error);
     res.status(500).send(error.message);
@@ -143,9 +133,6 @@ const authenticate = async (req, res, next) => {
     if (!req.user.id) {
       return res.status(400).send("User id was not provided in token");
     }
-    // if (!req.user.email) {
-    //   return res.status(400).send("User email was not provided in token");
-    // }
 
     next();
   } catch (e) {

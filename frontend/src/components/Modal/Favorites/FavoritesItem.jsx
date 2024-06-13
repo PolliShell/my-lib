@@ -2,23 +2,21 @@ import s from "./Favorites.module.css";
 import RemoveItemImg from "../../../public/Navbar/Modal/bin icon.png";
 import { axiosInstance } from "../../../axios/axiosInstance";
 import { useHelperFuncs } from "../../../providers/HelperProvider";
+import { useStateValue } from "../../../providers/StateProvider";
 
-export const FavoritesItem = ({ data, favBooks, setFavBooks }) => {
+export const FavoritesItem = ({ data }) => {
   const { navigateTo } = useHelperFuncs();
+  const { favorites, setFavorites } = useStateValue();
 
   const removeItem = async () => {
-    try {
-      const res = await axiosInstance.delete(
-        `/favorites/delete/${data.objectId}`
+    const res = await axiosInstance.delete(
+      `/favorites/delete/${data.objectId}`
+    );
+    if (res.status) {
+      const filteredBooks = favorites.filter(
+        (b) => b.objectId !== data.objectId
       );
-      if (res.status) {
-        const filteredBooks = favBooks.filter(
-          (b) => b.objectId !== data.objectId
-        );
-        setFavBooks(filteredBooks);
-      }
-    } catch (e) {
-      console.log("Failed deleting item");
+      setFavorites(filteredBooks);
     }
   };
 

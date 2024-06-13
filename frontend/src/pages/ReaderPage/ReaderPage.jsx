@@ -81,7 +81,6 @@ export const ReaderPage = () => {
         const renderPage = (num) => {
           pageRendering = true;
           pdfDoc.getPage(num).then((page) => {
-            console.log(ctx);
             canvas.height = page._pageInfo.view[3];
             canvas.width = page._pageInfo.view[2];
             ctx.scale(scale, scale);

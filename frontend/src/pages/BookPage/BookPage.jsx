@@ -1,82 +1,41 @@
 import s from "./BookPage.module.css";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import BookRatingNumIcon from "../../public/BookPage/rating num icon.png";
 import OutlinedRatingIcon from "../../public/BookPage/outlined star icon.png";
 import HeartIcon from "../../public/BookPage/heart.png";
 // import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
 // import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
-import {Link, useParams} from "react-router-dom";
-import { AuthContext, useAuth } from "../../providers/AuthProvider";
-import { checkLSItem, getLSItem, setLSItem } from "../../helpers/LSHelpers";
+import { useParams } from "react-router-dom";
 import { Modal } from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
 import { axiosInstance } from "../../axios/axiosInstance";
+import { useHelperFuncs } from "../../providers/HelperProvider";
+import { useStateValue } from "../../providers/StateProvider";
 
 export const BookPage = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
-  const { isAuthenticated } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(null);
+  const { isModalOpen, openModal, addBookToCart, addToFavorites, navigateTo } =
+    useHelperFuncs();
+  const { cart } = useStateValue();
 
   useEffect(() => {
     const fetchBook = async () => {
-      try {
-        const res = await axiosInstance.get(`/books/${id}`);
-        setBook(res);
-      } catch (error) {
-        console.error("Failed to fetch book: ", error);
+      const res = await axiosInstance.get(`/books/${id}`);
+      if (!res.status) {
+        console.error("Error while fetching book");
+        return;
       }
+
+      setBook(res);
     };
 
     fetchBook();
   }, []);
 
-  const openModal = (modalType) => {
-    if (modalType === "cart") {
-      setModalType("cart");
-      setIsModalOpen(true);
-      return;
-    }
-
-    if (isAuthenticated) {
-      setModalType(modalType);
-    } else {
-      setModalType("login");
-    }
-    setIsModalOpen(true);
-  };
-
-  const addToCart = (book) => {
-    if (isAuthenticated) {
-      // TODO: request to the server to add a book to the cart
-    } else {
-      const LS_cartBooks = getLSItem("cartBooks");
-      if (!checkLSItem("cartBooks", "objectId", book.objectId)) {
-        LS_cartBooks.push(book);
-        setLSItem("cartBooks", LS_cartBooks);
-      }
-    }
-    setModalType("cart");
-    setIsModalOpen(true);
-  };
-
   const checkCartItem = (id) => {
-    if (isAuthenticated) {
-      // make request to DB if book exists there
-    }
-
-    return checkLSItem("cartBooks", "objectId", id);
-  };
-
-  const addToFavorites = async () => {
-    try {
-      await axiosInstance.post("/favorites/add", { bookId: book.objectId });
-    } catch (e) {
-      console.error(e);
-    }
-    openModal("favorites");
+    return cart.find((b) => b.objectId === id);
   };
 
   return (
@@ -92,8 +51,11 @@ export const BookPage = () => {
         <div className={s.book_inner}>
           <div className={s.book_info}>
             <h3 className={s.book_title}>{book.title}</h3>
-            <h4 className={s.book_author}>
-              <Link to={`/authors/${book.author_id}`}>{book.author_name}</Link>
+            <h4
+              className={s.book_author}
+              onClick={() => navigateTo(`/authors/${book.author_id}`)}
+            >
+              {book.author_name}
             </h4>
             <span className={s.book_genres}>
               {book?.genres?.join(", ") || ""}
@@ -196,17 +158,7 @@ export const BookPage = () => {
             <button className={s.read_online}>Читати онлайн</button>
             <div className={s.actions_separator}></div>
             {!checkCartItem(book.objectId) ? (
-              <button
-                className={s.buy}
-                onClick={() =>
-                  addToCart({
-                    objectId: book.objectId,
-                    cover_image: book.cover_image,
-                    title: book.title,
-                    price: book.price,
-                  })
-                }
-              >
+              <button className={s.buy} onClick={() => addBookToCart(book)}>
                 Замовити
               </button>
             ) : (

@@ -8,6 +8,10 @@ const getFavorites = async (req, res) => {
     const query = new Parse.Query(FavBooks).equalTo("userId", userId);
     const favBooks = await query.find();
 
+    if (!favBooks.length) {
+      return res.status(200).json([]);
+    }
+
     const bookIds = favBooks.map((b) => b.get("bookId"));
 
     const Books = Parse.Object.extend("books");

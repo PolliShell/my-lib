@@ -5,18 +5,18 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 
 require("dotenv").config();
-require("./config/passportSutup");
+require("./config/passportSetup");
 
-const bookRoutes = require("./routes/bookRoutes");
-const genreRoutes = require("./routes/genresRoutes");
-const authorRoutes = require("./routes/authorRoutes");
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-const cartRoutes = require("./routes/cartRoutes");
-const favoritesRoutes = require("./routes/favoritesRoutes");
-const paymentRoutes = require("./routes/paymentRoutes");
-const googleRoutes = require("./routes/googleRoutes");
-const commentRoutes = require("./routes/commentRoutes");
+const bookRoutes = require("./routes/book/bookRoutes");
+const genreRoutes = require("./routes/genres/genresRoutes");
+const authorRoutes = require("./routes/author/authorRoutes");
+const authRoutes = require("./routes/auth/authRoutes");
+const userRoutes = require("./routes/user/userRoutes");
+const cartRoutes = require("./routes/cart/cartRoutes");
+const favoritesRoutes = require("./routes/favorites/favoritesRoutes");
+const paymentRoutes = require("./routes/payment/paymentRoutes");
+const googleRoutes = require("./routes/google/googleRoutes");
+const commentRoutes = require("./routes/comment/commentRoutes");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -47,7 +47,7 @@ app.use("/comments", commentRoutes);
 app.use("/authors", authorRoutes);
 app.use("/auth", authRoutes);
 app.use("/auth/google", googleRoutes);
-app.use("/genre", genreRoutes);
+app.use("/genres", genreRoutes);
 app.use("/user", userRoutes);
 app.use("/cart", cartRoutes);
 app.use("/favorites", favoritesRoutes);

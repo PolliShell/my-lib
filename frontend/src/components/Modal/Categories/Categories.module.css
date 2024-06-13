@@ -1,0 +1,57 @@
+.modal_shadow {
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+}
+
+.categories {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  padding: 25px 20px;
+  padding-top: 45px;
+  background: #fff;
+  border-radius: 15px;
+  min-width: 700px;
+  max-width: 960px;
+  margin: 0 auto;
+  margin-top: 75px;
+}
+
+.categories_close_btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  padding: 5px;
+  background: none;
+}
+
+.categories_close_btn img {
+  width: 14px;
+  height: 13px;
+}
+
+.categories_items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.categories_item {
+  border: 1px solid #c0c0c0;
+  border-radius: 15px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background 0.1s ease-in-out;
+}
+
+.categories_item:hover {
+  background: #f3f3f3;
+}
