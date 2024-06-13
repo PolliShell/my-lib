@@ -1,4 +1,3 @@
-// controllers/authorControllers.js
 const Parse = require("../../config/parseConfig");
 
 const getAllAuthors = async (req, res) => {

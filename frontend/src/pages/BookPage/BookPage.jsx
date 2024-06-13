@@ -6,7 +6,7 @@ import OutlinedRatingIcon from "../../public/BookPage/outlined star icon.png";
 import HeartIcon from "../../public/BookPage/heart.png";
 // import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
 // import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import { AuthContext, useAuth } from "../../providers/AuthProvider";
 import { checkLSItem, getLSItem, setLSItem } from "../../helpers/LSHelpers";
 import { Modal } from "../../components/Modal/Modal";
@@ -92,7 +92,9 @@ export const BookPage = () => {
         <div className={s.book_inner}>
           <div className={s.book_info}>
             <h3 className={s.book_title}>{book.title}</h3>
-            <h4 className={s.book_author}>{book.author_name}</h4>
+            <h4 className={s.book_author}>
+              <Link to={`/authors/${book.author_id}`}>{book.author_name}</Link>
+            </h4>
             <span className={s.book_genres}>
               {book?.genres?.join(", ") || ""}
             </span>

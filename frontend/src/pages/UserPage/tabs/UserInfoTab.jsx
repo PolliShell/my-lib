@@ -1,16 +1,25 @@
-import { useAuth } from "../../../providers/AuthProvider";
 import s from "../UserPage.module.css";
+import { useState, useEffect } from "react";
 import { axiosInstance } from "../../../axios/axiosInstance";
-import { useState } from "react";
 import { useHelperFuncs } from "../../../providers/HelperProvider";
 
-export const UserInfoTab = () => {
-  const { user } = useAuth();
+export const UserInfoTab = ({ user }) => {
   const { navigateTo } = useHelperFuncs();
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
+    username: user?.username || "",
+    email: user?.email || "",
+    phone: user?.phone || "", // Если у вас есть поле phone в user
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        username: user.username,
+        email: user.email,
+        phone: user.phone || "", // Если есть phone
+      });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,8 +39,8 @@ export const UserInfoTab = () => {
     }, {});
     try {
       await axiosInstance.put(
-        `/user/profile/${user.objectId}`,
-        filteredFormData
+          `/user/profile/${user.objectId}`,
+          filteredFormData
       );
       navigateTo("/");
     } catch (err) {
@@ -40,42 +49,44 @@ export const UserInfoTab = () => {
   };
 
   return (
-    <>
-      <form onSubmit={updateUserInfo} className={s.user_info}>
-        <div className={s.user_info_inputs}>
-          <div>
-            <label htmlFor="username">Username:</label>
-            <input
-              type="username"
-              name="username"
-              placeholder="Your username"
-              onChange={handleChange}
-              // value={user.username}
-            />
+      <>
+        <form onSubmit={updateUserInfo} className={s.user_info}>
+          <div className={s.user_info_inputs}>
+            <div>
+              <label htmlFor="username">Username:</label>
+              <input
+                  type="username"
+                  name="username"
+                  placeholder="Your username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+              />
+            </div>
+            <div>
+              <label htmlFor="email">Email: </label>
+              <input
+                  type="email"
+                  name="email"
+                  placeholder="Your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+              />
+            </div>
+            <div>
+              <label htmlFor="phone">Phone: </label>
+              <input
+                  type="phone"
+                  name="phone"
+                  placeholder="Your phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor="email">Email: </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Your email"
-              onChange={handleChange}
-              /*value={user.email}*/
-            />
-          </div>
-          <div>
-            <label htmlFor="phone">Phone: </label>
-            <input
-              type="phone"
-              name="phone"
-              placeholder="Your phone"
-              onChange={handleChange}
-              /*value={user.phone}*/
-            />
-          </div>
-        </div>
-        <button type="submit">Change</button>
-      </form>
-    </>
+          <button type="submit">Change</button>
+        </form>
+      </>
   );
 };
