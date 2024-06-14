@@ -1,5 +1,5 @@
 import s from "./UserPage.module.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { StrictNavbar } from "../../components/StrictNavbar/StrictNavbar";
 import { UserInfoTab } from "./tabs/UserInfoTab";
 import { BoughtBooksTab } from "./tabs/BoughtBooksTab/BoughtBooksTab";

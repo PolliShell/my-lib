@@ -2,7 +2,6 @@ import { useAuth } from "../../../providers/AuthProvider";
 import s from "../UserPage.module.css";
 import { useState } from "react";
 import { axiosInstance } from "../../../axios/axiosInstance";
-import { useState } from "react";
 import { useHelperFuncs } from "../../../providers/HelperProvider";
 
 export const UserInfoTab = () => {
