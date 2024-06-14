@@ -61,8 +61,10 @@ export const Navbar = () => {
     );
   };
 
-  const handleSearchBook = async () =>
+  const handleSearchBook = async (e) => {
+    e.preventDefault();
     navigateTo(`/books/search?title=${formData.title}`);
+  };
 
   return (
     <>

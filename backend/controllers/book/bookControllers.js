@@ -28,25 +28,27 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const Books = Parse.Object.extend("books");
-  const query = new Parse.Query(Books).equalTo("objectId", id);
+
   try {
-    const book = await query.first();
+    const Books = Parse.Object.extend("books");
+    const book = await new Parse.Query(Books).equalTo("objectId", id).first();
+
     if (!book) {
       return res.status(404).send("Book not found");
     }
 
     // Fetch additional information from books_info table
     const BooksInfo = Parse.Object.extend("books_info");
-    const infoQuery = new Parse.Query(BooksInfo).equalTo("book_id", id);
-    const bookInfo = await infoQuery.first();
+    const bookInfo = await new Parse.Query(BooksInfo)
+      .equalTo("book_id", id)
+      .first();
 
     const author = await getAuthorById(book.get("author_id"));
 
     // Combine book details with additional information
     const combinedBook = {
-      ...book.toJSON(),
       ...bookInfo.toJSON(),
+      ...book.toJSON(),
       author_name: author.full_name,
     };
 
@@ -113,9 +115,16 @@ const searchBookByTitle = async (req, res) => {
       return res.status(200).json([]);
     }
 
-    const bookData = books.map((book) => book.toJSON());
+    const booksWithAuthors = await Promise.all(
+      books.map(async (book) => {
+        const bookData = book.toJSON();
+        const author = await getAuthorById(bookData.author_id);
+        bookData.author_name = author.full_name;
+        return bookData;
+      })
+    );
 
-    res.status(200).json(bookData);
+    res.status(200).json(booksWithAuthors);
   } catch (e) {
     console.error("Error:", e);
     res.status(500).json({ error: "Internal Server Error" });

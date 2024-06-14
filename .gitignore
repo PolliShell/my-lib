@@ -5,4 +5,6 @@ docker-compose.yml
 
 # /.idea/
 /.idea/
+
+node_modules/
 .vercel

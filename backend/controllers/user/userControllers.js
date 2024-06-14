@@ -1,35 +1,25 @@
 const Parse = require("../../config/parseConfig");
 
 const getUserById = async (req, res) => {
+  const userId = req.params.id;
+
   try {
-    const userId = req.params.id;
-    const query = new Parse.Query(Parse.User);
-
-    // Fetch the user by ID
-    const user = await query.get(userId);
-
-    if (user) {
-      // Convert the Parse.User object to JSON
-      const userJSON = user.toJSON();
-
-      // Only include safe fields
-      const response = {
-        id: user.id,
-        username: user.get("username"),
-        email: user.get("email"),
-        createdAt: user.get("createdAt"),
-        updatedAt: user.get("updatedAt"),
-      };
-
-      res.json(response);
-    } else {
-      res.status(404).json({ error: "User not found" });
+    const user = await new Parse.Query(Parse.User).get(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
-  } catch (error) {
-    console.error(
-      `Ошибка при получении пользователя с ID ${req.params.id}: ${error.message}`
-    );
-    res.status(500).json({ error: "Внутренняя ошибка сервера" });
+
+    const mappedUser = {
+      id: user.id,
+      username: user.get("username"),
+      email: user.get("email"),
+      createdAt: user.get("createdAt"),
+      updatedAt: user.get("updatedAt"),
+    };
+
+    res.json(mappedUser);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 };
 

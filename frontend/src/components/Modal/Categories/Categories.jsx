@@ -13,7 +13,10 @@ export const Categories = ({ setCategoriesModalOpen }) => {
           <div
             key={c.objectId}
             className={s.categories_item}
-            onClick={() => navigateTo(`/books/by-category/${c.objectId}`)}
+            onClick={() => {
+              setCategoriesModalOpen(false);
+              navigateTo(`/books/by-category/${c.objectId}`);
+            }}
           >
             <span>{c.title}</span>
           </div>

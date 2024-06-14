@@ -4,5 +4,6 @@ const genreController = require("../../controllers/genre/genreControllers");
 
 router.get("/", genreController.getAll);
 router.get("/:id", genreController.getBooksByGenre);
+router.get("/by-book/:id", genreController.getBookGenres);
 
 module.exports = router;

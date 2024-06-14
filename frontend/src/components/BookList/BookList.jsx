@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 import s from "./BookList.module.css";
 import { BookPreview } from "../BookPreview/BookPreview";
 import { useEffect, useState } from "react";
@@ -16,26 +15,38 @@ export const BookList = ({ type }) => {
   const { categoryId } = useParams();
 
   useEffect(() => {
-    const fetchCategoryBooks = async () => {
-      try {
-        const res = await axiosInstance.get(`/genres/${categoryId}`);
-        setCategoryBooks(res);
-      } catch (e) {
-        console.error("Failed to fetch category books", e);
-      }
-    };
+    if (type === "categorySearch") {
+      const fetchCategoryBooks = async () => {
+        try {
+          const res = await axiosInstance.get(`/genres/${categoryId}`);
+          setCategoryBooks(res);
+        } catch (e) {
+          console.error("Failed to fetch category books", e);
+        }
+      };
 
-    const fetchSearchBooks = async () => {
-      try {
-        const res = await axiosInstance.post(
-          `/books/search?title=${titleParam}`
-        );
-        setSearchBooks(res);
-      } catch (e) {
-        console.error("Failed to search books", e);
-      }
-    };
+      fetchCategoryBooks();
+    }
+  }, [categoryId]);
 
+  useEffect(() => {
+    if (type === "titleSearch") {
+      const fetchSearchBooks = async () => {
+        try {
+          const res = await axiosInstance.post(
+            `/books/search?title=${titleParam}`
+          );
+          setSearchBooks(res);
+        } catch (e) {
+          console.error("Failed to search books", e);
+        }
+      };
+
+      fetchSearchBooks();
+    }
+  }, [titleParam]);
+
+  useEffect(() => {
     const fetchBooks = async () => {
       try {
         const res = await axiosInstance.get("/books");
@@ -44,16 +55,6 @@ export const BookList = ({ type }) => {
         console.error("Failed to fetch books", e);
       }
     };
-
-    switch (type) {
-      case "titleSearch":
-        fetchSearchBooks();
-        break;
-      case "categorySearch":
-        fetchCategoryBooks();
-        break;
-    }
-
     fetchBooks();
   }, []);
 

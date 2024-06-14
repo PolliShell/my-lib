@@ -16,7 +16,7 @@ const cartRoutes = require("./routes/cart/cartRoutes");
 const favoritesRoutes = require("./routes/favorites/favoritesRoutes");
 const paymentRoutes = require("./routes/payment/paymentRoutes");
 // const googleRoutes = require("./routes/google/googleRoutes");
-const commentRoutes = require("./routes/comment/commentRoutes");
+const reviewsRoutes = require("./routes/reviews/reviewsRoutes");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -43,13 +43,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url} ${res.statusCode}`);
-    next();
+  console.log(`${req.method} ${req.url} ${res.statusCode}`);
+  next();
 });
 
-
 app.use("/books", bookRoutes);
-app.use("/comments", commentRoutes);
+app.use("/reviews", reviewsRoutes);
 app.use("/authors", authorRoutes);
 app.use("/auth", authRoutes);
 // app.use("/auth/google", googleRoutes);

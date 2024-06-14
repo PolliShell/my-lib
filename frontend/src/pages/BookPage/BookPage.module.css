@@ -155,6 +155,10 @@ body {
 }
 
 .book_rating_text {
+  color: #3899df;
+  cursor: pointer;
+  border-left: 1px solid #626b77;
+  padding: 3px 15px;
   margin-left: 20px;
   font-size: 16px;
 }
@@ -174,7 +178,7 @@ body {
 }
 
 .book_desc_inner p,
-.book_resentment_text p {
+.book_review_text p {
   line-height: 135%;
   font-size: 16px;
   margin-bottom: 5px;
@@ -198,66 +202,66 @@ body {
   margin-left: 5px;
 }
 
-.book_resentment_heading {
+.book_review_heading {
   font-size: 26px;
   font-weight: 500;
   margin-bottom: 10px;
 }
 
-.book_resentment_commenter {
+.book_review_commenter {
   margin-left: 5px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
 }
 
-.book_resentment_commenter img {
+.book_review_commenter img {
   max-width: 30px;
   margin-right: 10px;
 }
 
-.book_resentment_commenter_heading {
+.book_review_commenter_heading {
   font-size: 12px;
   color: #626b77;
   flex-grow: 1;
 }
 
-.book_resentment_commenter_heading b {
+.book_review_commenter_heading b {
   color: #2e2e2e;
 }
 
-.book_resentment_date {
+.book_review_date {
   color: #626b77;
   font-size: 12px;
   font-weight: 200;
 }
 
-.book_resentment_rating {
+.book_review_rating {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
 }
 
-.book_resentment_rating img {
+.book_review_rating img {
   max-height: 15px;
   max-width: 15px;
   margin-right: 5px;
 }
 
-.book_resentment_rating span {
+.book_review_rating span {
   font-size: 22px;
   font-weight: 500;
 }
 
-.book_resentment_text {
+.book_review_text {
   margin-bottom: 25px;
 }
 
-.book_resentment_text p {
+.book_review_text p {
   margin-bottom: 2px;
 }
 
-.book_resentment_text .book_desc_resize {
+.book_review_text .book_desc_resize {
   font-size: 14px;
 }
 
@@ -284,11 +288,11 @@ body {
   line-height: 135%;
 }
 
-.book_resentments {
+.book_reviews {
   margin-bottom: 50px;
 }
 
-.book_resentments h4 {
+.book_reviews h4 {
   font-size: 26px;
   font-weight: 500;
   margin-bottom: 10px;

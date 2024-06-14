@@ -4,38 +4,102 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import BookRatingNumIcon from "../../public/BookPage/rating num icon.png";
 import OutlinedRatingIcon from "../../public/BookPage/outlined star icon.png";
 import HeartIcon from "../../public/BookPage/heart.png";
-// import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
-// import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
+import ColoredRatingIcon from "../../public/BookPage/colored star icon.png";
+import CommenterAvatar from "../../public/BookPage/commenter avatar.png";
 import { useParams } from "react-router-dom";
 import { Modal } from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
 import { axiosInstance } from "../../axios/axiosInstance";
 import { useHelperFuncs } from "../../providers/HelperProvider";
 import { useStateValue } from "../../providers/StateProvider";
+import { Review } from "../../components/Review/Review";
+import { AddReviewModal } from "../../components/Modal/AddReviewModal/AddReviewModal";
 
 export const BookPage = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
+  const [bookGenres, setBookGenres] = useState([]);
+  const [bookReviews, setBookReviews] = useState([]);
+  const [isReviewModalOpen, setReviewModalOpen] = useState(false);
   const { isModalOpen, openModal, addBookToCart, addToFavorites, navigateTo } =
     useHelperFuncs();
-  const { cart } = useStateValue();
+  const { cart, boughtItems } = useStateValue();
 
   useEffect(() => {
     const fetchBook = async () => {
       const res = await axiosInstance.get(`/books/${id}`);
-      if (!res.status) {
-        console.error("Error while fetching book");
-        return;
-      }
-
       setBook(res);
     };
 
+    const fetchBookGenres = async () => {
+      const res = await axiosInstance.get(`/genres/by-book/${id}`);
+      setBookGenres(res);
+    };
+
+    const fetchBookReviews = async () => {
+      const res = await axiosInstance.get(`/reviews/by-book/${id}`);
+      setBookReviews(res);
+    };
+
     fetchBook();
+    fetchBookGenres();
+    fetchBookReviews();
   }, []);
 
-  const checkCartItem = (id) => {
-    return cart.find((b) => b.objectId === id);
+  const renderBookReviews = () => {
+    if (bookReviews.length) {
+      return bookReviews.map((review) => (
+        <Review key={review.objectId} data={review} />
+      ));
+    }
+    return "none";
+  };
+
+  const renderReadBtn = (id) => {
+    const isExists = boughtItems.find((i) => i.objectId === id);
+
+    return isExists ? (
+      <>
+        <button
+          className={s.read_online}
+          onClick={() => window.open(`${book.book_link}`, "_blank")}
+        >
+          Читати онлайн
+        </button>
+        <div className={s.actions_separator}></div>
+      </>
+    ) : (
+      ""
+    );
+  };
+
+  const renderBuyBtn = (id) => {
+    const isExists = cart.find((b) => b.objectId === id);
+
+    return isExists ? (
+      <button className={s.show_cart} onClick={() => openModal("cart")}>
+        У корзині
+      </button>
+    ) : (
+      <button className={s.buy} onClick={() => addBookToCart(book)}>
+        Замовити
+      </button>
+    );
+  };
+
+  const renderRating = () => {
+    if (book.rating) {
+      return (
+        <>
+          <div className={s.book_rating_num}>
+            <span>{book.rating}</span>
+            <img src={BookRatingNumIcon} alt="book rating num icon" />
+          </div>
+        </>
+      );
+    }
+
+    return "Немає рейтингу";
   };
 
   return (
@@ -58,22 +122,17 @@ export const BookPage = () => {
               {book.author_name}
             </h4>
             <span className={s.book_genres}>
-              {book?.genres?.join(", ") || ""}
+              {bookGenres.map((g) => g.title)?.join(", ") || ""}
             </span>
           </div>
           <div className={s.book_rating}>
-            <div className={s.book_rating_num}>
-              <span>{book.rating}</span>
-              <img src={BookRatingNumIcon} alt="book rating num icon" />
+            {renderRating()}{" "}
+            <div
+              className={s.book_rating_text}
+              onClick={() => setReviewModalOpen(true)}
+            >
+              Залишити відгук
             </div>
-            <div className={s.book_rating_action}>
-              <img src={OutlinedRatingIcon} alt="star icon" />
-              <img src={OutlinedRatingIcon} alt="star icon" />
-              <img src={OutlinedRatingIcon} alt="star icon" />
-              <img src={OutlinedRatingIcon} alt="star icon" />
-              <img src={OutlinedRatingIcon} alt="star icon" />
-            </div>
-            <span className={s.book_rating_text}>Моя оцінка</span>
           </div>
           <div className={s.book_description}>
             <h5 className={s.book_desc_heading}>Опис книги</h5>
@@ -88,24 +147,24 @@ export const BookPage = () => {
               {book.publishing_house}
             </span>
           </div>
-          {/* <div className={s.book_best_resentment}>
-            <h4 className={s.book_resentment_heading}>
+          {/* <div className={s.book_best_review}>
+            <h4 className={s.book_review_heading}>
               Найкраща рецензія на книгу
             </h4>
-            <div className={s.book_resentment_commenter}>
+            <div className={s.book_review_commenter}>
               <img src={CommenterAvatar} alt="commenter avatar" />
-              <span className={s.book_resentment_commenter_heading}>
+              <span className={s.book_review_commenter_heading}>
                 <b>{book.bestReview.user}</b> написав рецензію
               </span>
-              <span className={s.book_resentment_date}>
+              <span className={s.book_review_date}>
                {new Date(book.bestReview.date).toLocaleDateString()}
               </span>
             </div>
-            <div className={s.book_resentment_rating}>
+            <div className={s.book_review_rating}>
              <img src={ColoredRatingIcon} alt="comment star" />
              <span>{book.bestReview.rating}</span>
             </div>
-            <div className={s.book_resentment_text}>
+            <div className={s.book_review_text}>
              <p>{book.bestReview.text}</p>
              <span className={s.book_desc_resize}>Розгорнути</span>
             </div>
@@ -124,29 +183,9 @@ export const BookPage = () => {
             </div>
             <div className={s.horizontal_hr}></div>
           </div>
-          <div className={s.book_resentments}>
+          <div className={s.book_reviews}>
             <h4>Рецензії</h4>
-            {/* {book.reviews.map((review, index) => (
-             <div key={index} className={s.book_resentment}>
-               <div className={s.book_resentment_commenter}>
-                 <img src={CommenterAvatar} alt="commenter avatar" />
-                 <span className={s.book_resentment_commenter_heading}>
-                   <b>{review.user}</b> написав рецензію
-                 </span>
-                 <span className={s.book_resentment_date}>
-                   {new Date(review.date).toLocaleDateString()}
-                 </span>
-               </div>
-               <div className={s.book_resentment_rating}>
-                 <img src={ColoredRatingIcon} alt="comment star" />
-                 <span>{review.rating}</span>
-               </div>
-               <div className={s.book_resentment_text}>
-                 <p>{review.text}</p>
-                 <span className={s.book_desc_resize}>Розгорнути</span>
-               </div>
-             </div>
-            ))} */}
+            {renderBookReviews()}
           </div>
         </div>
         <div className={s.book_actions}>
@@ -155,19 +194,16 @@ export const BookPage = () => {
           </button>
           <span className={s.book_price}>{book.price} грн</span>
           <div className={s.book_btns}>
-            <button className={s.read_online}>Читати онлайн</button>
-            <div className={s.actions_separator}></div>
-            {!checkCartItem(book.objectId) ? (
-              <button className={s.buy} onClick={() => addBookToCart(book)}>
-                Замовити
-              </button>
-            ) : (
-              <button className={s.show_cart} onClick={() => openModal("cart")}>
-                У корзині
-              </button>
-            )}
+            {renderReadBtn(book.objectId)}
+
+            {renderBuyBtn(book.objectId)}
           </div>
         </div>
+        {isReviewModalOpen &&
+          ReactDOM.createPortal(
+            <AddReviewModal setReviewModalOpen={setReviewModalOpen} />,
+            document.body
+          )}
         {isModalOpen && ReactDOM.createPortal(<Modal />, document.body)}
       </main>
     </>
