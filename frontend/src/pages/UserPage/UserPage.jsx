@@ -11,30 +11,25 @@ export const UserPage = () => {
   const [user, setUser] = useState(null); // Состояние для хранения данных пользователя
 
   useEffect(() => {
-    // Получаем токен из URL
     const token = new URLSearchParams(window.location.search).get("token");
 
     if (token) {
-      // Сохраняем токен в localStorage
       localStorage.setItem("userToken", token);
-
-      // Получаем данные пользователя с сервера
       axiosInstance.get("/user/profile", {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
           .then((response) => {
+            console.log("Response data:", response.data); // Логирование полного ответа
             setUser(response.data.user);
           })
           .catch((error) => {
             console.error("Error fetching user data:", error);
           });
 
-      // Убираем токен из URL после получения данных
       window.history.replaceState({}, document.title, "/");
     } else {
-      // Если токен отсутствует в URL, пробуем получить его из localStorage
       const storedToken = localStorage.getItem("userToken");
       if (storedToken) {
         axiosInstance.get("/user/profile", {
@@ -43,6 +38,7 @@ export const UserPage = () => {
           }
         })
             .then((response) => {
+              console.log("Response data:", response.data); // Логирование полного ответа
               setUser(response.data.user);
             })
             .catch((error) => {

@@ -34,44 +34,43 @@ export const LoginForm = () => {
     window.location.reload();
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     window.location.href = "http://localhost:3000/auth/google";
   };
 
   return (
-    <>
       <div className={s.modal_body}>
         <div className={s.modal_body_header}>
           <span className={s.modal_body_heading}>Увійти в кабінет</span>
           <span className={s.modal_body_subheading}>
-            Увійдіть, щоб мати можливість додавати книги у обране та писати
-            відгуки до прочитаних книг
-          </span>
+          Увійдіть, щоб мати можливість додавати книги у обране та писати
+          відгуки до прочитаних книг
+        </span>
         </div>
         <div className={s.modal_body_quick_auth}>
           <img
-            src={GoogleAuthIcon}
-            alt="google auth"
-            className="google_auth"
-            onClick={handleGoogleLogin}
+              src={GoogleAuthIcon}
+              alt="google auth"
+              className="google_auth"
+              onClick={handleGoogleLogin}
           />
         </div>
         <form onSubmit={handleLogin} className={s.modal_body_form}>
           <input
-            type="email"
-            placeholder="Пошта"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
+              type="email"
+              placeholder="Пошта"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
           />
           <input
-            type="password"
-            placeholder="Пароль"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
+              type="password"
+              placeholder="Пароль"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
           />
           <button type="submit" className={s.submitButton}>
             Увійти
@@ -80,13 +79,12 @@ export const LoginForm = () => {
         <div className={s.modal_body_register}>
           <span className={s.modal_body_register_desc}>Немає профілю?</span>
           <span
-            className={s.modal_body_register_link}
-            onClick={() => openModal("signup")}
+              className={s.modal_body_register_link}
+              onClick={() => openModal("signup")}
           >
-            Зареєструйтесь
-          </span>
+          Зареєструйтесь
+        </span>
         </div>
       </div>
-    </>
   );
 };

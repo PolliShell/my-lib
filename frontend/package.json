@@ -45,7 +45,7 @@
   "devDependencies": {
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
-    "pdfjs-dist": "^2.7.570"
+    "pdfjs-dist": "^2.16.105"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
