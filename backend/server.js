@@ -3,7 +3,7 @@ const cors = require("cors");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("passport");
-
+const path = require('path');
 require("dotenv").config();
 require("./config/passportSetup");
 
@@ -23,7 +23,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({ credentials: true }));
-
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
