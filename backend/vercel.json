@@ -7,14 +7,19 @@
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/server.js"
-    }
+    { "src": "/books(.*)", "dest": "/routes/book/bookRoutes.js" },
+    { "src": "/comments(.*)", "dest": "/routes/comment/commentRoutes.js" },
+    { "src": "/authors(.*)", "dest": "/routes/author/authorRoutes.js" },
+    { "src": "/auth(.*)", "dest": "/routes/auth/authRoutes.js" },
+    { "src": "/auth/google(.*)", "dest": "/routes/google/googleRoutes.js" },
+    { "src": "/genres(.*)", "dest": "/routes/genres/genresRoutes.js" },
+    { "src": "/user(.*)", "dest": "/routes/user/userRoutes.js" },
+    { "src": "/cart(.*)", "dest": "/routes/cart/cartRoutes.js" },
+    { "src": "/favorites(.*)", "dest": "/routes/favorites/favoritesRoutes.js" },
+    { "src": "/payment(.*)", "dest": "/routes/payment/paymentRoutes.js" }
   ],
   "env": {
-    "APP_PORT": "3000",
     "COOKIE_SECRET": "dsdjclxskd",
-    "ENVIRONMENT": "production"
+    "NODE_ENV": "production"
   }
 }

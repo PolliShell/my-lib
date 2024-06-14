@@ -15,7 +15,7 @@ const userRoutes = require("./routes/user/userRoutes");
 const cartRoutes = require("./routes/cart/cartRoutes");
 const favoritesRoutes = require("./routes/favorites/favoritesRoutes");
 const paymentRoutes = require("./routes/payment/paymentRoutes");
-const googleRoutes = require("./routes/google/googleRoutes");
+// const googleRoutes = require("./routes/google/googleRoutes");
 const commentRoutes = require("./routes/comment/commentRoutes");
 
 const app = express();
@@ -42,11 +42,17 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url} ${res.statusCode}`);
+    next();
+});
+
+
 app.use("/books", bookRoutes);
 app.use("/comments", commentRoutes);
 app.use("/authors", authorRoutes);
 app.use("/auth", authRoutes);
-app.use("/auth/google", googleRoutes);
+// app.use("/auth/google", googleRoutes);
 app.use("/genres", genreRoutes);
 app.use("/user", userRoutes);
 app.use("/cart", cartRoutes);
